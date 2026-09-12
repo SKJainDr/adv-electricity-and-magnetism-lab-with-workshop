@@ -1,0 +1,2616 @@
+<!doctype html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/favicon-16x16.png">
+<link rel="icon" href="../assets/favicon.ico">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Advanced Electricity &amp; Magnetism Learning Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700;900&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#132a3a; --navy:#0e2a3d; --navy-deep:#081a26; --paper:#f4f1e9; --paper2:#ffffff;
+  --gold:#c9a227; --teal:#1f3a93; --rust:#a8452f; --line:#d8d2c2; --danger:#b3261e; --royal-blue:#1f3a93;
+  --heading:#081a26; --muted:#5a6570; --tint:#faf8f1;
+}
+[data-theme="dark"]{
+  --ink:#dde6ec; --paper:#0b1f2e; --paper2:#132a3c; --line:#2a4a63;
+  --heading:#f2d9a6; --muted:#a9b7c0; --tint:#16324a;
+}
+[data-theme="dark"] body{background:var(--paper);}
+[data-theme="dark"] .why-matters{background:linear-gradient(120deg,#16324a,#1a2f22);color:#dde6ec;}
+[data-theme="dark"] .cert-unlock{background:#12283a;}
+[data-theme="dark"] .graph-box{background:repeating-linear-gradient(0deg,#12233a,#12233a 19px,#1a2f4a 20px),repeating-linear-gradient(90deg,transparent,transparent 19px,#24405f 20px)!important;color:#f2d9a6!important;}
+*{box-sizing:border-box;}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:'Source Sans 3',sans-serif;line-height:1.5;}
+h1,h2,h3,h4{font-family:'Fraunces',serif;color:var(--heading);font-weight:700;letter-spacing:-0.01em;margin-top:0;}
+a{color:var(--teal);}
+code{font-family:'JetBrains Mono',monospace;}
+
+/* ---------- layout ---------- */
+.topbar{background:var(--navy-deep);color:#efe7d2;padding:14px 22px;border-bottom:4px solid var(--gold);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:50;}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:1.15rem;color:#fbead0;}
+.brand .mark{width:34px;height:34px;border-radius:50%;background:var(--gold);color:var(--navy-deep);
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Fraunces',serif;}
+.topbar .sub{font-size:.82rem;color:#c9c2a8;}
+
+.shell{display:flex;min-height:calc(100vh - 62px);}
+.sidebar{
+  width:280px;flex-shrink:0;background:var(--navy);color:#e7e2d2;padding:18px 0;
+  overflow-y:auto;position:sticky;top:62px;height:calc(100vh - 62px);
+}
+.sidebar .group-label{
+  font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:#9fb0b8;padding:14px 20px 6px;
+}
+.navlink{
+  display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;font-size:.92rem;color:#dcd6c2;
+  border-left:3px solid transparent;transition:.12s;
+}
+.navlink:hover{background:rgba(255,255,255,.05);}
+.navlink.active{background:rgba(200,147,42,.15);border-left-color:var(--gold);color:#fdf6e7;font-weight:700;}
+.navlink .ic{font-size:1.05rem;width:22px;text-align:center;}
+
+.progress-widget{position:sticky;top:0;z-index:5;background:var(--navy);padding:14px 20px 12px;
+  border-bottom:1px solid rgba(255,255,255,.12);}
+.progress-widget-head{display:flex;justify-content:space-between;align-items:center;font-size:.74rem;
+  text-transform:uppercase;letter-spacing:.06em;color:#9fb0b8;margin-bottom:8px;}
+#progressResetBtn{background:none;border:1px solid rgba(255,255,255,.2);border-radius:5px;color:#9fb0b8;
+  cursor:pointer;font-size:.72rem;padding:2px 7px;}
+#progressResetBtn:hover{color:var(--gold);border-color:var(--gold);}
+.progress-bar-track{height:8px;border-radius:6px;background:rgba(255,255,255,.1);overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),#e8c766);width:0%;
+  transition:width .35s ease;border-radius:6px;}
+.progress-widget-count{margin-top:6px;font-size:.76rem;color:#cbd0d8;}
+
+.navlink-check{width:16px;height:16px;flex-shrink:0;border:2px solid rgba(255,255,255,.35);border-radius:4px;
+  display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:.68rem;
+  color:transparent;transition:.12s;}
+.navlink-check.done{background:var(--gold);border-color:var(--gold);color:#081a26;}
+.navlink-check:hover{border-color:var(--gold);}
+
+.main{flex:1;padding:32px 36px;max-width:1180px;}
+.panel{display:none;}
+.panel.active{display:block;animation:fadein .25s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+.panel-head{margin-bottom:18px;}
+.panel-head .kicker{color:var(--rust);text-transform:uppercase;font-size:.78rem;letter-spacing:.07em;font-weight:700;}
+.panel-head h2{font-size:1.7rem;margin:4px 0 8px;}
+.panel-head p{color:var(--muted);max-width:800px;}
+
+.why-matters{
+  max-width:800px;margin:12px 0 4px;padding:12px 16px;border-radius:8px;
+  background:linear-gradient(120deg,#eef2fb,#fbf3dc);border-left:4px solid var(--teal);
+  display:flex;gap:10px;align-items:flex-start;font-size:.88rem;color:#28313a;
+}
+.why-matters .wm-ic{font-size:1.15rem;line-height:1.3;flex-shrink:0;}
+.why-matters b{color:var(--teal);}
+
+.doclink{display:inline-block;margin-top:12px;font-size:.85rem;font-weight:700;color:var(--teal);
+  text-decoration:none;border-bottom:2px solid transparent;}
+.doclink:hover{border-bottom-color:var(--gold);color:var(--rust);}
+
+.card{background:var(--paper2);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:20px;
+  box-shadow:0 1px 3px rgba(0,0,0,.04);}
+.stage{background:#050d14;border-radius:10px;overflow:hidden;position:relative;}
+.stage canvas{display:block;width:100%;}
+.model-stage{background:linear-gradient(180deg,#0a1826,#0d2233);border-radius:10px;overflow:hidden;position:relative;border:1px solid #1c3550;}
+.model-stage canvas{display:block;width:100%;height:auto;}
+.model-caption{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+  background:var(--tint);border:1px solid var(--line);border-top:none;border-radius:0 0 10px 10px;
+  padding:8px 16px;margin-top:-1px;font-size:.84rem;color:var(--muted);}
+.model-caption b{color:var(--rust);}
+.section-tag{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:0 0 8px;}
+.graph-toggle{display:flex;align-items:center;gap:8px;margin:4px 0 10px;}
+.graph-toggle button{background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:6px;
+  padding:4px 12px;font-size:.8rem;cursor:pointer;font-weight:600;}
+.graph-toggle button.on{background:var(--teal);color:#fff;border-color:var(--teal);}
+.mini-graph-wrap{display:none;}
+.mini-graph-wrap.show{display:block;}
+
+.controls-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:16px;}
+@media (max-width:820px){.controls-grid{grid-template-columns:1fr;}}
+.ctrl{background:var(--tint);border:1px solid var(--line);border-radius:8px;padding:12px 16px;}
+.ctrl label{display:block;font-weight:600;margin-bottom:6px;font-size:.9rem;}
+.ctrl input[type=range]{width:100%;}
+.ctrl select{width:100%;padding:6px;border-radius:6px;border:1px solid var(--line);}
+.readout{font-family:'JetBrains Mono',monospace;color:var(--rust);font-weight:700;}
+
+.stat-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;}
+.stat{background:var(--navy);color:#f6ecd9;border-radius:8px;padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:.85rem;}
+.stat b{color:var(--gold);}
+
+.btn{background:var(--rust);color:#fff;border:none;padding:9px 18px;border-radius:6px;cursor:pointer;font-weight:700;font-size:.88rem;}
+.btn.secondary{background:var(--teal);}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--navy);}
+[data-theme="dark"] .btn.ghost{color:var(--gold);}
+
+.note{background:#fbf3e4;border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:10px 16px;font-size:.9rem;margin-top:14px;}
+[data-theme="dark"] .note{background:#3a2f14;color:#f2d9a6;}
+.formula{font-family:'JetBrains Mono',monospace;background:#0e2a3d;color:#f6ecd9;border-radius:8px;padding:10px 16px;display:inline-block;margin:6px 0;font-size:.92rem;}
+
+/* safety section */
+.hazard-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+@media (max-width:820px){.hazard-grid{grid-template-columns:1fr;}}
+.hazard-card{border:1px solid var(--line);border-radius:10px;padding:16px 18px;background:var(--paper2);}
+.hazard-card.danger{border-color:var(--danger);background:#fdf1ef;}
+.hazard-card h4{margin:0 0 8px;font-size:1.02rem;}
+.class-table{width:100%;border-collapse:collapse;margin-top:10px;}
+.class-table th,.class-table td{border:1px solid var(--line);padding:8px 10px;font-size:.87rem;text-align:left;}
+.class-table th{background:var(--navy);color:#f6ecd9;font-family:'Fraunces',serif;}
+.class-table tr:nth-child(even) td{background:var(--tint);}
+.warn-banner{background:var(--danger);color:#fff;padding:12px 18px;border-radius:8px;font-weight:700;margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;}
+
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:.85rem;}
+.legend span{display:inline-flex;align-items:center;gap:6px;}
+.swatch{width:14px;height:14px;border-radius:3px;display:inline-block;}
+
+footer.pagefoot{background:var(--navy-deep);color:#c9c2a8;padding:22px 36px;font-size:.82rem;}
+footer.pagefoot a{color:#f2d9a6;}
+
+@media (max-width:900px){
+  .shell{flex-direction:column;}
+  .sidebar{width:100%;height:auto;position:static;display:flex;overflow-x:auto;padding:8px;}
+  .sidebar .group-label{display:none;}
+  .navlink{white-space:nowrap;border-left:none;border-bottom:3px solid transparent;}
+  .navlink.active{border-left:none;border-bottom-color:var(--gold);}
+  .main{padding:20px;}
+  .progress-widget{position:static;flex-shrink:0;width:170px;padding:10px 12px;border-bottom:none;
+    border-right:1px solid rgba(255,255,255,.12);margin-right:6px;}
+  .progress-widget-head{font-size:.66rem;margin-bottom:6px;}
+  .progress-widget-count{font-size:.68rem;}
+}
+/* ---------- Industrial Workshops ---------- */
+.task-box{
+  background:linear-gradient(120deg,#0e2a3d,#081a26);color:#f6ecd9;border-radius:10px;padding:16px 20px;
+  margin-bottom:16px;border-left:5px solid var(--gold);
+}
+.task-box .role{color:#f2d9a6;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;font-weight:700;}
+.task-box p{margin:6px 0 0;color:#dbe4e6;font-size:.94rem;}
+.spec-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+.spec-pill{background:rgba(200,147,42,.18);border:1px solid rgba(200,147,42,.5);color:#f2d9a6;
+  padding:3px 10px;border-radius:14px;font-size:.78rem;font-family:'JetBrains Mono',monospace;}
+.score-meter{
+  display:flex;align-items:center;gap:16px;margin-top:16px;flex-wrap:wrap;
+}
+.gauge-wrap{width:120px;height:120px;position:relative;flex-shrink:0;}
+.gauge-num{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;
+  font-family:'Fraunces',serif;font-weight:700;color:var(--heading);
+}
+.gauge-num .pct{font-size:1.5rem;}
+.gauge-num .lbl{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+.score-msg{flex:1;min-width:220px;}
+.score-msg .verdict{font-weight:700;font-size:1.02rem;}
+.score-msg .hint{font-size:.86rem;color:var(--muted);margin-top:4px;}
+.cert-unlock{
+  margin-top:16px;background:#eef7f1;border:1px solid var(--teal);border-radius:10px;padding:16px 18px;
+  display:none;
+}
+.cert-unlock.show{display:block;}
+.cert-unlock input{padding:8px 12px;border-radius:6px;border:1px solid var(--line);width:240px;margin-right:10px;}
+
+/* certificate modal */
+#certOverlay{
+  position:fixed;inset:0;background:rgba(8,26,38,.85);z-index:1000;display:none;
+  align-items:center;justify-content:center;padding:20px;
+}
+#certOverlay.show{display:flex;}
+.certificate{
+  background:#fdf9ef;width:100%;max-width:820px;padding:50px 60px;border-radius:4px;position:relative;
+  border:10px double #c8932a;box-shadow:0 20px 60px rgba(0,0,0,.5);font-family:'Fraunces',serif;color:#132a3a;
+  text-align:center;
+}
+.certificate .close-cert{
+  position:absolute;top:10px;right:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#5a6570;
+}
+.certificate .cert-top{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:10px;}
+.certificate .cert-top img.cert-rect-logo{height:42px;width:auto;object-fit:contain;}
+.certificate .cert-orb{width:40px;height:40px;border-radius:50%;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.2);flex:none;}
+.certificate .cert-orb img{width:100%;height:100%;object-fit:cover;display:block;}
+.certificate .seal{font-size:2.4rem;}
+.certificate h1{font-size:1.9rem;margin:6px 0 2px;letter-spacing:.02em;}
+.certificate .sub{font-family:'Source Sans 3',sans-serif;color:#5a6570;font-size:.85rem;text-transform:uppercase;letter-spacing:.1em;}
+.certificate .name{font-size:2rem;margin:22px 0 4px;color:var(--rust);border-bottom:2px solid var(--gold);display:inline-block;padding:0 20px 6px;}
+.certificate .body-text{font-family:'Source Sans 3',sans-serif;font-size:1.02rem;color:#333;margin:16px auto;max-width:560px;line-height:1.7;}
+.certificate .workshop-name{font-weight:700;color:var(--navy-deep);}
+.certificate .score-line{font-family:'JetBrains Mono',monospace;color:var(--teal);font-weight:700;}
+.certificate .sign-row{display:flex;justify-content:space-between;margin-top:46px;padding:0 20px;font-family:'Source Sans 3',sans-serif;}
+.certificate .sign-block{text-align:center;}
+.certificate .sign-block .line{border-top:1px solid #132a3a;width:220px;margin-bottom:6px;padding-top:6px;}
+.certificate .sign-block .who{font-weight:700;font-size:.92rem;}
+.certificate .sign-block .role{font-size:.8rem;color:#5a6570;}
+.certificate .date-line{font-family:'Source Sans 3',sans-serif;font-size:.85rem;color:#5a6570;margin-top:14px;}
+.cert-actions{text-align:center;margin-top:24px;display:flex;gap:12px;justify-content:center;}
+@media print{
+  body *{visibility:hidden;}
+  #certOverlay, #certOverlay *{visibility:visible;}
+  #certOverlay{position:fixed;inset:0;background:#fff;display:flex;}
+  .certificate{box-shadow:none;border:10px double #c8932a;}
+  .cert-actions, .close-cert{display:none!important;}
+}
+</style>
+
+</head>
+<body>
+<button id="themeToggleBtn" aria-label="Toggle dark/light theme" title="Toggle dark/light theme"
+  style="position:fixed;top:14px;right:16px;z-index:999;width:40px;height:40px;border-radius:50%;
+  border:2px solid var(--gold);background:var(--navy-deep);color:var(--gold);font-size:1.1rem;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.3);">🌙</button>
+<script>
+(function(){
+  var KEY='drskjain-theme';
+  var btn=document.getElementById('themeToggleBtn');
+  function apply(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+    if(btn) btn.textContent = theme==='dark' ? '☀' : '🌙';
+  }
+  var saved = localStorage.getItem(KEY);
+  if(!saved){ saved = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+  apply(saved);
+  if(btn){
+    btn.addEventListener('click', function(){
+      var cur = document.documentElement.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+      localStorage.setItem(KEY, cur);
+      apply(cur);
+    });
+  }
+})();
+</script>
+
+<div class="topbar">
+  <div class="brand"><img src="../assets/brand-orb.jpg" alt="Invertis University mark" style="height:30px;width:30px;border-radius:50%;object-fit:cover;flex:none;" onerror="this.style.display='none'"><img src="../assets/invertis-logo.png" alt="Invertis University logo" style="height:30px;width:auto;" onerror="this.style.display='none'"><span class="mark">⚡</span> Advanced Electricity &amp; Magnetism Learning Lab</div>
+  <div class="sub"><a href="../docs-em/index.html" style="color:#f2d9a6;">User Guide</a></div>
+</div>
+
+<div class="shell">
+  <div class="sidebar" id="sidebar">
+    <div class="progress-widget">
+      <div class="progress-widget-head"><span>Progress</span><button id="progressResetBtn">reset</button></div>
+      <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+      <div class="progress-widget-count" id="progressCount">0 / 25 explored</div>
+    </div>
+    <div id="navList"></div>
+  </div>
+  <div class="main" id="mainMount"></div>
+</div>
+
+<footer class="pagefoot">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+    <img src="../assets/brand-orb.jpg" alt="Invertis University mark" style="height:24px;width:24px;border-radius:50%;object-fit:cover;flex:none;" onerror="this.style.display='none'">
+    <img src="../assets/invertis-logo.png" alt="Invertis University logo" style="height:24px;width:auto;" onerror="this.style.display='none'">
+    <strong style="color:#f2d9a6;">Invertis University, Bareilly</strong>
+  </div>
+  Advanced Electricity &amp; Magnetism Learning Lab &middot; Prepared as companion interactive material for
+  Electricity &amp; Magnetism (BHP301) &middot; All simulations are simplified educational models, not
+  metrology-grade instruments. Full theory, procedure and viva-voce documentation:
+  <a href="../docs-em/index.html">User Guide &amp; Lab Manual</a>.
+  <hr style="border:none;border-top:1px solid rgba(255,255,255,.12);margin:14px 0;">
+  Prepared &amp; maintained by <b>Dr. S. K. Jain</b>,
+  Associate Professor in Physics, Department of Applied Sciences and Humanities, Invertis University, Bareilly, India &middot;
+  <a href="mailto:sanjeev.j@invertis.org">sanjeev.j@invertis.org</a> &middot; &copy; 2026 Author. Site maintained by Dr. S. K. Jain.
+  <div style="margin-top:12px;text-align:center;">
+    <img src="https://visitor-badge.laobi.icu/badge?page_id=drskjain-em-lab" alt="Visitor count for this page" style="height:20px;vertical-align:middle;border-radius:4px;opacity:.9;">
+  </div>
+</footer>
+
+<div id="certOverlay">
+  <div class="certificate">
+    <button class="close-cert" onclick="closeCert()">&times;</button>
+    <div class="cert-top">
+      <img class="cert-rect-logo" src="../assets/invertis-logo-light.png" alt="Invertis University logo">
+      <div class="cert-orb"><img src="../assets/brand-orb.jpg" alt="Invertis University mark"></div>
+    </div>
+    <div class="seal">🏅</div>
+    <h1>Certificate of Completion</h1>
+    <div class="sub">Advanced Electricity &amp; Magnetism Learning Lab &middot; Industrial Workshop</div>
+    <div class="name" id="certName">Student Name</div>
+    <div class="body-text">has successfully completed the <span class="workshop-name" id="certWorkshop">Workshop</span>
+      workshop with a final score of <span class="score-line" id="certScore">0%</span>, demonstrating practical
+      understanding of the underlying electromagnetic principles and their industrial application.</div>
+    <div class="sign-row">
+      <div class="sign-block"><div class="line"></div><div class="who">Dr. S. K. Jain</div><div class="role">Associate Professor, Physics</div></div>
+      <div class="sign-block"><div class="line"></div><div class="who" id="certDate"></div><div class="role">Date of Completion</div></div>
+    </div>
+  </div>
+</div>
+<div class="cert-actions" id="certPrintWrap" style="display:none;position:fixed;bottom:20px;left:0;right:0;z-index:1001;">
+</div>
+
+<script>
+var EM_PANELS = [
+  {
+    id:"coulombs-law", kind:"experiment", category:"Electrostatics", title:"Coulomb's Law & Force Between Point Charges",
+    aim:"To verify the inverse-square dependence of the electrostatic force between two point charges on their separation, and its direct proportionality to the product of the charges, using a torsion-balance style virtual setup.", formula:"F = q₁q₂ / (4πε₀εr r²)",
+    controls:[{key:"q1",label:"q₁",name:"Charge 1 (sign sets polarity)",unit:"nC",min:-50,max:50,default:10,step:1},{key:"q2",label:"q₂",name:"Charge 2 (sign sets polarity)",unit:"nC",min:-50,max:50,default:10,step:1},{key:"r",label:"r",name:"Separation",unit:"cm",min:2,max:30,default:10,step:0.5},{key:"epsr",label:"εr",name:"Medium relative permittivity",unit:"",min:1,max:80,default:1,step:0.5}],
+    resultSymbol:"F", resultUnitHint:"",
+    sweepKey:"q1",
+    compute: function(ctl){ var q1={v:ctl.q1||0.0001}; var q2={v:ctl.q2||0.0001}; var r={v:ctl.r}; var k=8.988; var F=k*q1.v*q2.v/(r.v*r.v); var rel=q1.lc/Math.abs(q1.v)+q2.lc/Math.abs(q2.v)+2*r.lc/r.v; return {Y:F,Yunit:'×10⁻⁹ N (scaled, +ve = repulsive)',dY:Math.abs(F)*rel,pct:rel*100}; }
+  },
+  {
+    id:"dipole-field-potential", kind:"experiment", category:"Electrostatics", title:"Electric Field & Potential Due to an Electric Dipole",
+    aim:"To compute and plot the electric field and potential of an electric dipole along its axial and equatorial lines, and to study the angular variation of the field at a fixed distance.", formula:"V = p·cosθ / (4πε₀ r²),  E_axial = 2kp/r³,  E_equatorial = kp/r³",
+    controls:[{key:"q",label:"q",name:"Charge magnitude on each pole (sign flips the dipole)",unit:"nC",min:-20,max:20,default:5,step:0.5},{key:"a2",label:"2a",name:"Charge separation",unit:"cm",min:1,max:10,default:4,step:0.5},{key:"r",label:"r",name:"Probe distance",unit:"cm",min:5,max:50,default:20,step:1},{key:"theta",label:"θ",name:"Probe angle from axis",unit:"°",min:0,max:180,default:0,step:5}],
+    resultSymbol:"E_axial", resultUnitHint:"",
+    sweepKey:"q",
+    compute: function(ctl){ var q={v:ctl.q||0.0001}; var a2={v:ctl.a2}; var r={v:ctl.r}; var k=8.988e9; var p=q.v*1e-9*a2.v*1e-2; var rm=r.v*1e-2; var E=2*k*p/(rm*rm*rm); var rel=q.lc/Math.abs(q.v)+a2.lc/a2.v+3*r.lc/r.v; return {Y:E,Yunit:'N/C',dY:Math.abs(E)*rel,pct:rel*100}; }
+  },
+  {
+    id:"gauss-law-flux", kind:"experiment", category:"Electrostatics", title:"Gauss's Law — Electric Flux Through Closed Surfaces",
+    aim:"To verify Gauss's law by computing the net electric flux through virtual closed Gaussian surfaces (sphere, cube, cylinder) enclosing a known charge, and to relate the flux to the field of standard symmetric charge distributions.", formula:"Φ_E = ∮ E·dA = Q_enc / ε₀",
+    controls:[{key:"Qenc",label:"Q_enc",name:"Enclosed charge",unit:"nC",min:-20,max:20,default:10,step:1},{key:"Qout",label:"Q_out",name:"Charge placed outside surface",unit:"nC",min:-20,max:20,default:5,step:1},{key:"radius",label:"R",name:"Gaussian sphere radius",unit:"cm",min:5,max:40,default:15,step:1},{key:"shape",label:"shape",name:"Surface shape",unit:"",options:["sphere", "cube", "cylinder"],default:"sphere",isSelect:true}],
+    resultSymbol:"Φ", resultUnitHint:"",
+    sweepKey:"Qenc",
+    compute: function(ctl){ var Qenc={v:ctl.Qenc}; var eps=8.854; var phi=Qenc.v/eps*1000; var rel=Qenc.lc/Qenc.v; return {Y:phi,Yunit:'N·m²/C (scaled)',dY:phi*rel,pct:rel*100}; }
+  },
+  {
+    id:"parallel-plate-capacitor", kind:"experiment", category:"Electrostatics", title:"Capacitance of a Parallel-Plate Capacitor (With & Without Dielectric)",
+    aim:"To study the dependence of a parallel-plate capacitor's capacitance on plate area, plate separation, and an inserted dielectric slab, and to determine the dielectric constant of an unknown material.", formula:"C = εrε₀A/d",
+    controls:[{key:"A",label:"A",name:"Plate area",unit:"cm²",min:50,max:500,default:200,step:10},{key:"d",label:"d",name:"Plate separation",unit:"mm",min:0.5,max:10,default:2,step:0.1},{key:"epsr",label:"εr",name:"Dielectric constant",unit:"",min:1,max:80,default:1,step:0.5},{key:"V",label:"V",name:"Applied voltage",unit:"V",min:1,max:100,default:10,step:1}],
+    resultSymbol:"C", resultUnitHint:"",
+    sweepKey:"A",
+    compute: function(ctl){ var epsr={v:ctl.epsr}; var A={v:ctl.A}; var d={v:ctl.d}; var eps0=8.854e-12; var Am2=A.v*1e-4; var dm=d.v*1e-3; var C=epsr.v*eps0*Am2/dm*1e12; var rel=epsr.lc/epsr.v+A.lc/A.v+d.lc/d.v; return {Y:C,Yunit:'pF',dY:C*rel,pct:rel*100}; }
+  },
+  {
+    id:"conductors-charge-distribution", kind:"experiment", category:"Electrostatics", title:"Charge Distribution on Conductors & the Van de Graaff Generator",
+    aim:"To study how charge distributes itself over the surface of conductors of different shapes at electrostatic equilibrium, and to understand the principle of the Van de Graaff generator for building up very high potentials.", formula:"V_dome = Q / (4πε₀ R),   E_surface = σ/ε₀",
+    controls:[{key:"R",label:"R",name:"Dome radius",unit:"cm",min:10,max:50,default:25,step:1},{key:"rate",label:"rate",name:"Belt charging rate",unit:"nC/s",min:1,max:20,default:5,step:1},{key:"time",label:"t",name:"Charging time",unit:"s",min:0,max:60,default:20,step:1},{key:"pointRadius",label:"r_tip",name:"Test conductor tip radius (for point-discharge study)",unit:"mm",min:0.5,max:20,default:2,step:0.5}],
+    resultSymbol:"V", resultUnitHint:"",
+    sweepKey:"R",
+    compute: function(ctl){ var rate={v:ctl.rate}; var time={v:ctl.time}; var R={v:ctl.R}; var k=8.988e9; var Qc=rate.v*time.v*1e-9; var Rm=R.v*1e-2; var V=k*Qc/Rm/1000; var rel=rate.lc/rate.v+time.lc/time.v+R.lc/R.v; return {Y:V,Yunit:'kV',dY:V*rel,pct:rel*100}; }
+  },
+  {
+    id:"biot-savart-wire", kind:"experiment", category:"Magnetostatics", title:"Biot–Savart Law — Magnetic Field Due to a Current-Carrying Wire",
+    aim:"To compute the magnetic field due to a finite straight current-carrying wire using the Biot–Savart law, verify the perpendicular-distance dependence, and recover Ampere's infinite-wire result as a limiting case.", formula:"B = (μ₀I / 4πa)(sinα₁ + sinα₂)",
+    controls:[{key:"I",label:"I",name:"Current (sign reverses direction)",unit:"A",min:-10,max:10,default:2,step:0.5},{key:"a",label:"a",name:"Perpendicular distance",unit:"cm",min:1,max:30,default:10,step:1},{key:"L",label:"L",name:"Wire length",unit:"cm",min:10,max:200,default:40,step:10}],
+    resultSymbol:"B", resultUnitHint:"",
+    sweepKey:"I",
+    compute: function(ctl){ var I={v:ctl.I||0.0001}; var a={v:ctl.a}; var mu0=4*Math.PI*1e-7; var am=a.v*1e-2; var B=mu0*I.v/(2*Math.PI*am)*1e5; var rel=I.lc/Math.abs(I.v)+a.lc/a.v; return {Y:B,Yunit:'×10⁻⁵ T',dY:Math.abs(B)*rel,pct:rel*100}; }
+  },
+  {
+    id:"circular-coil-helmholtz", kind:"experiment", category:"Magnetostatics", title:"Magnetic Field on the Axis of a Circular Coil & Helmholtz Coils",
+    aim:"To study the magnetic field along the axis of a single circular current loop, locate the point of maximum field, and demonstrate how a Helmholtz pair produces a highly uniform field at its centre.", formula:"B(x) = μ₀ N I R² / [2(R² + x²)^{3/2}]",
+    controls:[{key:"R",label:"R",name:"Coil radius",unit:"cm",min:5,max:30,default:10,step:1},{key:"N",label:"N",name:"Number of turns",unit:"",min:1,max:500,default:100,step:10},{key:"I",label:"I",name:"Current (sign reverses direction)",unit:"A",min:-5,max:5,default:1,step:0.1},{key:"x",label:"x",name:"Axial distance from centre",unit:"cm",min:-30,max:30,default:0,step:1},{key:"separation",label:"d",name:"Helmholtz coil separation (mode 2)",unit:"cm",min:5,max:30,default:10,step:1}],
+    resultSymbol:"B₀", resultUnitHint:"",
+    sweepKey:"R",
+    compute: function(ctl){ var N={v:ctl.N}; var I={v:ctl.I||0.0001}; var R={v:ctl.R}; var mu0=4*Math.PI*1e-7; var Rm=R.v*1e-2; var B=mu0*N.v*I.v/(2*Rm)*1e4; var rel=N.lc/N.v+I.lc/Math.abs(I.v)+R.lc/R.v; return {Y:B,Yunit:'×10⁻⁴ T',dY:Math.abs(B)*rel,pct:rel*100}; }
+  },
+  {
+    id:"ampere-law-solenoid-toroid", kind:"experiment", category:"Magnetostatics", title:"Ampere's Circuital Law — Field Inside a Solenoid & a Toroid",
+    aim:"To verify Ampere's circuital law by computing the magnetic field inside a long solenoid and a toroid, and to study the field's uniformity and its dependence on turns density and current.", formula:"Solenoid: B = μ₀ n I    |    Toroid: B(r) = μ₀ N I / (2πr)",
+    controls:[{key:"n",label:"n",name:"Solenoid turns density",unit:"turns/cm",min:5,max:100,default:30,step:5},{key:"I",label:"I",name:"Current (sign reverses direction)",unit:"A",min:-5,max:5,default:1,step:0.1},{key:"probePos",label:"x",name:"Probe position (0=centre, 1=at the end, 2=outside)",unit:"",min:0,max:2,default:0,step:1},{key:"toroidR",label:"R",name:"Toroid major radius",unit:"cm",min:5,max:30,default:15,step:1},{key:"toroidN",label:"N_t",name:"Toroid total turns",unit:"",min:50,max:1000,default:300,step:50}],
+    resultSymbol:"B", resultUnitHint:"",
+    sweepKey:"n",
+    compute: function(ctl){ var n={v:ctl.n}; var I={v:ctl.I||0.0001}; var mu0=4*Math.PI*1e-7; var ncm=n.v*100; var B=mu0*ncm*I.v*1000; var rel=n.lc/n.v+I.lc/Math.abs(I.v); return {Y:B,Yunit:'×10⁻³ T',dY:Math.abs(B)*rel,pct:rel*100}; }
+  },
+  {
+    id:"force-parallel-conductors", kind:"experiment", category:"Magnetostatics", title:"Force Between Two Parallel Current-Carrying Conductors",
+    aim:"To compute the force per unit length between two long parallel current-carrying wires, verify its dependence on the currents and their separation, and relate it to the SI definition of the ampere.", formula:"F/L = μ₀ I₁ I₂ / (2π d)",
+    controls:[{key:"I1",label:"I₁",name:"Current in wire 1",unit:"A",min:0.5,max:20,default:5,step:0.5},{key:"I2",label:"I₂",name:"Current in wire 2",unit:"A",min:0.5,max:20,default:5,step:0.5},{key:"d",label:"d",name:"Separation",unit:"cm",min:1,max:30,default:5,step:1},{key:"direction",label:"dir",name:"Relative direction (0=same, 1=opposite)",unit:"",min:0,max:1,default:0,step:1}],
+    resultSymbol:"F/L", resultUnitHint:"",
+    sweepKey:"I1",
+    compute: function(ctl){ var I1={v:ctl.I1}; var I2={v:ctl.I2}; var d={v:ctl.d}; var mu0=4*Math.PI*1e-7; var dm=d.v*1e-2; var F=mu0*I1.v*I2.v/(2*Math.PI*dm)*1e5; var rel=I1.lc/I1.v+I2.lc/I2.v+d.lc/d.v; return {Y:F,Yunit:'×10⁻⁵ N/m',dY:F*rel,pct:rel*100}; }
+  },
+  {
+    id:"faraday-induction", kind:"experiment", category:"Electrodynamics", title:"Faraday's Law of Electromagnetic Induction",
+    aim:"To verify Faraday's law of electromagnetic induction by studying the EMF induced in a coil due to a changing magnetic flux, and to confirm Lenz's law for the direction of the induced current.", formula:"ε = −N dΦ_B/dt",
+    controls:[{key:"N",label:"N",name:"Number of turns",unit:"",min:10,max:500,default:100,step:10},{key:"speed",label:"v",name:"Magnet approach speed",unit:"cm/s",min:1,max:50,default:10,step:1},{key:"Bmax",label:"B_max",name:"Peak field of the magnet",unit:"mT",min:5,max:100,default:30,step:5},{key:"area",label:"A",name:"Coil cross-sectional area",unit:"cm²",min:5,max:50,default:20,step:5},{key:"coreMu",label:"μᵣ",name:"Core relative permeability (χ = μᵣ−1, so 0↔χ=−1 and 1.7↔χ=0.7)",unit:"",min:0,max:1.7,default:1,step:0.1}],
+    resultSymbol:"ε", resultUnitHint:"",
+    sweepKey:"N",
+    compute: function(ctl){ var N={v:ctl.N}; var Bmax={v:ctl.Bmax}; var speed={v:ctl.speed}; var coreMu={v:ctl.coreMu}; var eps=N.v*Bmax.v*speed.v/1000*coreMu.v; var rel=N.lc/N.v+Bmax.lc/Bmax.v+speed.lc/speed.v; return {Y:eps,Yunit:'mV (model units)',dY:eps*rel,pct:rel*100}; }
+  },
+  {
+    id:"motional-emf-lenz", kind:"experiment", category:"Electrodynamics", title:"Motional EMF & Lenz's Law on a Sliding Rod",
+    aim:"To study the motional EMF generated by a conducting rod sliding on rails in a uniform magnetic field, verify ε = BLv, and observe the retarding (Lenz's-law) force that opposes the rod's motion when the circuit is closed.", formula:"ε = BLv,   I = ε/R,   F_retard = BIL = B²L²v/R",
+    controls:[{key:"B",label:"B",name:"Magnetic field",unit:"mT",min:10,max:500,default:100,step:10},{key:"L",label:"L",name:"Rail separation",unit:"cm",min:5,max:40,default:20,step:1},{key:"v",label:"v",name:"Rod velocity",unit:"m/s",min:0.1,max:5,default:1,step:0.1},{key:"R",label:"R",name:"Circuit resistance",unit:"Ω",min:1,max:50,default:10,step:1}],
+    resultSymbol:"ε", resultUnitHint:"",
+    sweepKey:"B",
+    compute: function(ctl){ var B={v:ctl.B}; var L={v:ctl.L}; var v={v:ctl.v}; var Bt=B.v*1e-3; var Lm=L.v*1e-2; var eps=Bt*Lm*v.v*1000; var rel=B.lc/B.v+L.lc/L.v+v.lc/v.v; return {Y:eps,Yunit:'mV',dY:eps*rel,pct:rel*100}; }
+  },
+  {
+    id:"rc-rl-transients", kind:"experiment", category:"Electrodynamics", title:"RC and RL Transient Circuits — Charging & Discharging",
+    aim:"To study the exponential charging and discharging behaviour of RC and RL circuits, measure the time constant in each case, and verify its dependence on the circuit parameters.", formula:"RC: V_C(t) = ε₀(1−e^{-t/τ}), τ=RC     |     RL: I(t) = (ε₀/R)(1−e^{-t/τ}), τ=L/R",
+    controls:[{key:"R",label:"R",name:"Resistance",unit:"kΩ",min:1,max:100,default:10,step:1},{key:"C",label:"C",name:"Capacitance",unit:"μF",min:1,max:100,default:10,step:1},{key:"L",label:"L",name:"Inductance (RL mode)",unit:"H",min:0.1,max:10,default:1,step:0.1},{key:"eps0",label:"ε₀",name:"Source EMF",unit:"V",min:1,max:20,default:10,step:1},{key:"mode",label:"mode",name:"Circuit (0=RC, 1=RL)",unit:"",min:0,max:1,default:0,step:1}],
+    resultSymbol:"τ", resultUnitHint:"",
+    sweepKey:"R",
+    compute: function(ctl){ var R={v:ctl.R}; var C={v:ctl.C}; var tau=R.v*1000*C.v*1e-6*1000; var rel=R.lc/R.v+C.lc/C.v; return {Y:tau,Yunit:'ms',dY:tau*rel,pct:rel*100}; }
+  },
+  {
+    id:"lcr-resonance", kind:"experiment", category:"Electrodynamics", title:"LCR Series Resonance & Quality Factor (Q)",
+    aim:"To study the resonance behaviour of a series LCR circuit driven by an AC source, locate the resonant frequency, and determine the quality factor from the sharpness of the resonance curve.", formula:"ω₀ = 1/√(LC),   Q = ω₀L/R = (1/R)√(L/C)",
+    controls:[{key:"R",label:"R",name:"Resistance",unit:"Ω",min:1,max:200,default:20,step:1},{key:"L",label:"L",name:"Inductance",unit:"mH",min:1,max:500,default:100,step:10},{key:"C",label:"C",name:"Capacitance",unit:"μF",min:0.1,max:10,default:1,step:0.1},{key:"V0",label:"V₀",name:"Source amplitude",unit:"V",min:1,max:20,default:10,step:1},{key:"freq",label:"f",name:"Drive frequency",unit:"Hz",min:10,max:5000,default:500,step:10}],
+    resultSymbol:"f₀", resultUnitHint:"",
+    sweepKey:"R",
+    compute: function(ctl){ var L={v:ctl.L}; var C={v:ctl.C}; var Lh=L.v*1e-3; var Cf=C.v*1e-6; var f0=1/(2*Math.PI*Math.sqrt(Lh*Cf)); var rel=0.5*(L.lc/L.v+C.lc/C.v); return {Y:f0,Yunit:'Hz',dY:f0*rel,pct:rel*100}; }
+  },
+  {
+    id:"maxwell-plane-waves", kind:"experiment", category:"EM Waves & Propagation", title:"Maxwell's Equations & Plane Electromagnetic Wave Solutions",
+    aim:"To explore how Maxwell's four equations, together, predict self-sustaining transverse electromagnetic waves in free space, and to verify the relations between E, B, their phase, and the speed of light.", formula:"c = 1/√(μ₀ε₀),   E₀/B₀ = c,   E ⊥ B ⊥ direction of propagation",
+    controls:[{key:"freq",label:"f",name:"Wave frequency",unit:"MHz",min:1,max:1000,default:100,step:1},{key:"E0",label:"E₀",name:"Electric field amplitude",unit:"V/m",min:1,max:100,default:30,step:1},{key:"phaseOffset",label:"Δφ",name:"Artificial E-B phase offset (should be 0 physically)",unit:"°",min:0,max:90,default:0,step:15}],
+    resultSymbol:"B₀", resultUnitHint:"",
+    sweepKey:"freq",
+    compute: function(ctl){ var E0={v:ctl.E0}; var c=2.998e8; var B0=E0.v/c*1e9; var rel=E0.lc/E0.v; return {Y:B0,Yunit:'nT',dY:B0*rel,pct:rel*100}; }
+  },
+  {
+    id:"wave-propagation-media-skindepth", kind:"experiment", category:"EM Waves & Propagation", title:"Propagation of EM Waves in Dielectric & Conducting Media (Skin Depth)",
+    aim:"To study how the speed, wavelength, and attenuation of an electromagnetic wave change on entering a dielectric or a conducting medium, and to determine the skin depth for a conductor as a function of frequency and conductivity.", formula:"Dielectric: v = c/√(μrεr)     |     Conductor: δ = √(2/ωμσ)",
+    controls:[{key:"epsr",label:"εr",name:"Relative permittivity (dielectric mode)",unit:"",min:1,max:10,default:4,step:0.5},{key:"freq",label:"f",name:"Wave frequency",unit:"MHz",min:0.1,max:1000,default:100,step:10},{key:"sigma",label:"σ",name:"Conductivity (conductor mode)",unit:"MS/m",min:0.1,max:60,default:6,step:1},{key:"mode",label:"mode",name:"Medium (0=dielectric, 1=conductor)",unit:"",min:0,max:1,default:0,step:1}],
+    resultSymbol:"δ", resultUnitHint:"",
+    sweepKey:"epsr",
+    compute: function(ctl){ var freq={v:ctl.freq}; var sigma={v:ctl.sigma}; var w=2*Math.PI*freq.v*1e6; var mu0=4*Math.PI*1e-7; var sig=sigma.v*1e6; var delta=Math.sqrt(2/(w*mu0*sig))*1e6; var rel=0.5*(freq.lc/freq.v+sigma.lc/sigma.v); return {Y:delta,Yunit:'μm',dY:delta*rel,pct:rel*100}; }
+  },
+  {
+    id:"reflection-refraction-brewster", kind:"experiment", category:"EM Waves & Propagation", title:"Reflection, Refraction & Brewster's Angle for EM Waves",
+    aim:"To study the reflection and transmission of an electromagnetic wave at a dielectric interface using the Fresnel equations, and to locate Brewster's angle at which p-polarized reflection vanishes.", formula:"Snell's law: n₁ sinθᵢ = n₂ sinθₜ     |     Brewster's angle: θ_B = arctan(n₂/n₁)",
+    controls:[{key:"n1",label:"n₁",name:"Incident medium index",unit:"",min:1,max:2,default:1,step:0.05},{key:"n2",label:"n₂",name:"Transmitting medium index",unit:"",min:1,max:2.5,default:1.5,step:0.05},{key:"theta_i",label:"θᵢ",name:"Angle of incidence",unit:"°",min:0,max:89,default:30,step:1},{key:"polarization",label:"pol",name:"Polarization (0=s, 1=p)",unit:"",min:0,max:1,default:1,step:1}],
+    resultSymbol:"θ_B", resultUnitHint:"",
+    sweepKey:"n1",
+    compute: function(ctl){ var n1={v:ctl.n1}; var n2={v:ctl.n2}; var ratio=n2.v/n1.v; var thB=Math.atan(ratio)*180/Math.PI; var relratio=n2.lc/n2.v+n1.lc/n1.v; var dthB=(1/(1+ratio*ratio))*ratio*relratio*180/Math.PI; return {Y:thB,Yunit:'°',dY:dthB,pct:(dthB/thB)*100}; }
+  },
+  {
+    id:"dielectric-polarization-clausius-mossotti", kind:"experiment", category:"Electric & Magnetic Materials", title:"Dielectric Polarization & the Clausius–Mossotti Relation",
+    aim:"To study how an external electric field polarizes a dielectric material, relate the macroscopic polarization to the microscopic atomic polarizability using the Clausius–Mossotti relation, and observe the resulting bound charges.", formula:"P = ε₀(εr−1)E,     (εr−1)/(εr+2) = Nα/(3ε₀)",
+    controls:[{key:"N",label:"N",name:"Number density",unit:"×10²⁸ m⁻³",min:1,max:50,default:20,step:1},{key:"alpha",label:"α",name:"Molecular polarizability",unit:"×10⁻⁴⁰ C·m²/V",min:1,max:50,default:15,step:1},{key:"E",label:"E",name:"Applied field",unit:"kV/m",min:1,max:100,default:20,step:5}],
+    resultSymbol:"εr", resultUnitHint:"",
+    sweepKey:"N",
+    compute: function(ctl){ var N={v:ctl.N}; var alpha={v:ctl.alpha}; var eps0=8.854; var x=(N.v*1e28*alpha.v*1e-40)/(3*eps0*1e-12); var epsr=(1+2*x)/(1-x); var rel=N.lc/N.v+alpha.lc/alpha.v; return {Y:epsr,Yunit:'(dimensionless)',dY:epsr*rel*0.3,pct:rel*30}; }
+  },
+  {
+    id:"magnetic-hysteresis-bh-curve", kind:"experiment", category:"Electric & Magnetic Materials", title:"Magnetic Hysteresis & the B–H Curve of Ferromagnetic Materials",
+    aim:"To trace the B–H hysteresis loop of a ferromagnetic material as the applied field H is cycled, and to determine the saturation magnetization, retentivity (remanence), coercivity, and hysteresis energy loss per cycle.", formula:"H = nI,   Hysteresis loss per cycle per unit volume = ∮ H dB (loop area)",
+    controls:[{key:"material",label:"mat",name:"Material (0=soft iron, 1=ferrite, 2=hard steel)",unit:"",min:0,max:2,default:0,step:1},{key:"Hmax",label:"H_max",name:"Peak applied field",unit:"A/m",min:50,max:2000,default:500,step:50},{key:"cycles",label:"n",name:"Number of cycles to trace",unit:"",min:1,max:5,default:1,step:1}],
+    resultSymbol:"H_c", resultUnitHint:"",
+    sweepKey:"material",
+    compute: function(ctl){ var Hmax={v:ctl.Hmax}; var Hc=0.15*Hmax.v; var rel=Hmax.lc/Hmax.v; return {Y:Hc,Yunit:'A/m',dY:Hc*rel,pct:rel*100}; }
+  },
+  {
+    id:"image-charge-grounded-plane", kind:"experiment", category:"Electrostatics", title:"Method of Images — Charge Near a Grounded Conducting Plane",
+    aim:"To use the method of images to compute the attractive force and induced surface charge on an infinite grounded conducting plane due to a nearby point charge, replacing the plane by an equal and opposite image charge.",
+    formula:"F = q² / (4πε₀ (2d)²)   (attraction towards an image charge −q at depth d)",
+    controls:[{key:"q",label:"q",name:"Point charge",unit:"nC",min:1,max:50,default:12,step:1},{key:"d",label:"d",name:"Height above the grounded plane",unit:"cm",min:1,max:20,default:5,step:0.5}],
+    resultSymbol:"F", resultUnitHint:"",
+    sweepKey:"d",
+    compute: function(ctl){ var q={v:ctl.q}; var d={v:ctl.d}; var k=8.988; var F=k*q.v*q.v/((2*d.v)*(2*d.v)); var rel=2*q.lc/q.v+2*d.lc/d.v; return {Y:F,Yunit:'×10⁻⁹ N (attractive, towards plane)',dY:Math.abs(F)*rel,pct:rel*100}; }
+  },
+  {
+    id:"multipole-expansion-quadrupole", kind:"experiment", category:"Electrostatics", title:"Multipole Expansion — Linear Electric Quadrupole",
+    aim:"To compute the far-field electric potential of a linear quadrupole (charges +q, −2q, +q) and verify its characteristic 1/r³ fall-off, contrasted with the 1/r and 1/r² fall-offs of the monopole and dipole terms.",
+    formula:"V_quad(r) = 3qa² / (4πε₀ r³)   (r ≫ a, on-axis)",
+    controls:[{key:"q",label:"q",name:"End charge magnitude",unit:"nC",min:1,max:30,default:8,step:1},{key:"a",label:"a",name:"Charge spacing",unit:"cm",min:0.5,max:5,default:2,step:0.25},{key:"r",label:"r",name:"Field point distance (on axis)",unit:"cm",min:10,max:100,default:40,step:2}],
+    resultSymbol:"V", resultUnitHint:"",
+    sweepKey:"r",
+    compute: function(ctl){ var q={v:ctl.q}; var a={v:ctl.a}; var r={v:ctl.r}; var k=8.988; var V=3*k*q.v*a.v*a.v/(r.v*r.v*r.v); var rel=q.lc/q.v+2*a.lc/a.v+3*r.lc/r.v; return {Y:V,Yunit:'×10⁻⁹ V (quadrupole term only)',dY:Math.abs(V)*rel,pct:rel*100}; }
+  },
+  {
+    id:"magnetic-vector-potential-dipole", kind:"experiment", category:"Magnetostatics", title:"Magnetic Vector Potential of a Current Loop (Dipole Limit)",
+    aim:"To evaluate the magnetic vector potential A of a small current loop in the far-field (magnetic dipole) approximation, and relate it to the resulting dipole field B = ∇ × A.",
+    formula:"A_φ(r,θ) = μ₀ I a² sinθ / (4r²)   (r ≫ a)",
+    controls:[{key:"I",label:"I",name:"Loop current",unit:"A",min:0.1,max:10,default:2,step:0.1},{key:"a",label:"a",name:"Loop radius",unit:"cm",min:0.5,max:5,default:2,step:0.25},{key:"r",label:"r",name:"Field point distance",unit:"cm",min:10,max:80,default:30,step:2},{key:"theta",label:"θ",name:"Polar angle from loop axis",unit:"deg",min:0,max:180,default:90,step:5}],
+    resultSymbol:"A", resultUnitHint:"",
+    sweepKey:"r",
+    compute: function(ctl){ var I={v:ctl.I}; var a={v:ctl.a}; var r={v:ctl.r}; var th={v:ctl.theta}; var mu0=1.2566; var A=mu0*I.v*a.v*a.v*Math.sin(th.v*Math.PI/180)/(4*r.v*r.v); var rel=I.lc/I.v+2*a.lc/a.v+2*r.lc/r.v; return {Y:A*1000,Yunit:'×10⁻⁶ T·cm (scaled vector potential)',dY:Math.abs(A*1000)*rel,pct:rel*100}; }
+  },
+  {
+    id:"cyclotron-velocity-selector", kind:"experiment", category:"Magnetostatics", title:"Crossed E & B Fields — Velocity Selector & Cyclotron Motion",
+    aim:"To determine the velocity selected (undeflected) by a region of crossed uniform electric and magnetic fields, and to compute the cyclotron radius of the selected charged particle once it enters a pure magnetic field region.",
+    formula:"v = E / B ,    r_c = m v / (q B)",
+    controls:[{key:"E",label:"E",name:"Electric field",unit:"kV/m",min:1,max:50,default:10,step:1},{key:"B",label:"B",name:"Magnetic flux density",unit:"mT",min:1,max:100,default:20,step:1},{key:"m_over_q",label:"m/q",name:"Mass-to-charge ratio (×10⁻⁸ kg/C)",unit:"",min:0.5,max:20,default:5.7,step:0.1}],
+    resultSymbol:"v", resultUnitHint:"",
+    sweepKey:"B",
+    compute: function(ctl){ var E={v:ctl.E}; var B={v:ctl.B}; var moq={v:ctl.m_over_q}; var v=(E.v*1000)/(B.v/1000); var rc=moq.v*1e-8*v/(B.v/1000); var rel=E.lc/E.v+B.lc/B.v; return {Y:v/1000,Yunit:'km/s (selected drift velocity); r_c='+rc.toFixed(3)+' m',dY:Math.abs(v/1000)*rel,pct:rel*100}; }
+  },
+  {
+    id:"hall-effect-carrier-density", kind:"experiment", category:"Electric & Magnetic Materials", title:"Hall Effect — Carrier Density & Sign of Charge Carriers",
+    aim:"To measure the Hall voltage developed across a current-carrying conducting slab in a transverse magnetic field, and use it to determine the density and sign (electron/hole) of the majority charge carriers.",
+    formula:"V_H = I B / (n e t)",
+    controls:[{key:"I",label:"I",name:"Current through sample",unit:"mA",min:1,max:100,default:20,step:1},{key:"B",label:"B",name:"Transverse magnetic field",unit:"mT",min:5,max:500,default:150,step:5},{key:"n",label:"n",name:"Carrier density (doped semiconductor sample)",unit:"×10²⁰ m⁻³",min:0.5,max:50,default:5,step:0.5},{key:"t",label:"t",name:"Sample thickness",unit:"mm",min:0.05,max:2,default:0.5,step:0.05}],
+    resultSymbol:"V_H", resultUnitHint:"",
+    sweepKey:"B",
+    compute: function(ctl){ var I={v:ctl.I/1000}; var B={v:ctl.B/1000}; var n={v:ctl.n*1e20}; var t={v:ctl.t/1000}; var e=1.602e-19; var VH=I.v*B.v/(n.v*e*t.v); var rel=I.lc/(ctl.I)+B.lc/(ctl.B)+n.lc/(ctl.n)+t.lc/(ctl.t); return {Y:VH*1000,Yunit:'mV (Hall voltage)',dY:Math.abs(VH*1000)*rel,pct:rel*100}; }
+  },
+  {
+    id:"meissner-effect-flux-expulsion", kind:"experiment", category:"Electric & Magnetic Materials", title:"Meissner Effect — Flux Expulsion in a Superconductor",
+    aim:"To model the exponential decay of an applied magnetic field with depth inside a superconductor below its critical temperature, characterised by the London penetration depth λ, demonstrating the Meissner effect.",
+    formula:"B(x) = B₀ exp(−x/λ)",
+    controls:[{key:"B0",label:"B₀",name:"Applied surface field",unit:"mT",min:1,max:50,default:10,step:1},{key:"lambda",label:"λ",name:"London penetration depth",unit:"nm",min:20,max:200,default:80,step:5},{key:"x",label:"x",name:"Depth into superconductor",unit:"nm",min:0,max:400,default:100,step:5}],
+    resultSymbol:"B", resultUnitHint:"",
+    sweepKey:"x",
+    compute: function(ctl){ var B0={v:ctl.B0}; var lam={v:ctl.lambda}; var x={v:ctl.x}; var B=B0.v*Math.exp(-x.v/lam.v); var rel=B0.lc/B0.v+(x.v/lam.v)*(lam.lc/lam.v)+x.lc/lam.v; return {Y:B,Yunit:'mT (field remaining at depth x)',dY:Math.abs(B)*rel,pct:rel*100}; }
+  },
+  {
+    id:"eddy-current-damping", kind:"experiment", category:"Electrodynamics", title:"Eddy-Current Damping — Lenz's Law Braking",
+    aim:"To model the retarding force experienced by a conducting plate moving through a non-uniform magnetic field due to induced eddy currents, and its dependence on conductivity, speed and field strength.",
+    formula:"F_eddy ∝ σ t B² v w²   (per unit volume in the field region)",
+    controls:[{key:"B",label:"B",name:"Magnetic flux density",unit:"mT",min:10,max:500,default:200,step:10},{key:"v",label:"v",name:"Plate velocity",unit:"m/s",min:0.1,max:10,default:2,step:0.1},{key:"sigma",label:"σ",name:"Plate conductivity",unit:"×10⁶ S/m",min:1,max:60,default:35,step:1},{key:"t",label:"t",name:"Plate thickness",unit:"mm",min:0.5,max:10,default:3,step:0.5}],
+    resultSymbol:"F", resultUnitHint:"",
+    sweepKey:"v",
+    compute: function(ctl){ var B={v:ctl.B/1000}; var v={v:ctl.v}; var sig={v:ctl.sigma*1e6}; var t={v:ctl.t/1000}; var w=0.02; var F=sig.v*t.v*B.v*B.v*v.v*w*w; var rel=2*B.lc/(ctl.B)+v.lc/v.v+sig.lc/(ctl.sigma)+t.lc/(ctl.t); return {Y:F*1000,Yunit:'mN (retarding eddy-current force)',dY:Math.abs(F*1000)*rel,pct:rel*100}; }
+  },
+  {
+    id:"rlc-filter-response", kind:"experiment", category:"Electrodynamics", title:"RLC Filters — Low-Pass / High-Pass / Band-Pass Frequency Response",
+    aim:"To compute the frequency-dependent voltage-gain response of series RLC low-pass, high-pass and band-pass filter configurations, and locate the −3 dB cutoff/centre frequencies.",
+    formula:"|H(f)|_bandpass = R / √(R² + (ωL − 1/ωC)²)",
+    controls:[{key:"R",label:"R",name:"Resistance",unit:"Ω",min:1,max:1000,default:100,step:10},{key:"L",label:"L",name:"Inductance",unit:"mH",min:0.1,max:100,default:10,step:0.5},{key:"C",label:"C",name:"Capacitance",unit:"µF",min:0.01,max:10,default:1,step:0.05},{key:"f",label:"f",name:"Signal frequency",unit:"Hz",min:10,max:20000,default:1592,step:10}],
+    resultSymbol:"|H|", resultUnitHint:"",
+    sweepKey:"f",
+    compute: function(ctl){ var R={v:ctl.R}; var L={v:ctl.L/1000}; var C={v:ctl.C*1e-6}; var f={v:ctl.f}; var w=2*Math.PI*f.v; var X=w*L.v-1/(w*C.v); var H=R.v/Math.sqrt(R.v*R.v+X*X); var rel=R.lc/R.v+f.lc/f.v; return {Y:H,Yunit:'(band-pass gain, 0\u20131)',dY:Math.abs(H)*rel,pct:rel*100}; }
+  },
+  {
+    id:"poynting-vector-coaxial-cable", kind:"experiment", category:"Electrodynamics", title:"Poynting Vector & Power Flow in a Coaxial Cable",
+    aim:"To compute the Poynting vector S = E × H in the dielectric region between the inner and outer conductors of a coaxial cable carrying DC power, and verify that its integral over the annular cross-section equals the transmitted electrical power VI.",
+    formula:"S(r) = V I / (2π r² ln(b/a))",
+    controls:[{key:"V",label:"V",name:"Conductor voltage",unit:"V",min:1,max:400,default:100,step:5},{key:"I",label:"I",name:"Conductor current",unit:"A",min:0.1,max:20,default:5,step:0.5},{key:"a",label:"a",name:"Inner-conductor radius",unit:"mm",min:0.3,max:5,default:1,step:0.1},{key:"b",label:"b",name:"Outer-conductor (shield) radius",unit:"mm",min:2,max:20,default:5,step:0.5},{key:"r",label:"r",name:"Field point radius (a<r<b)",unit:"mm",min:1,max:19,default:2.5,step:0.1}],
+    resultSymbol:"S", resultUnitHint:"",
+    sweepKey:"r",
+    compute: function(ctl){ var V={v:ctl.V}; var I={v:ctl.I}; var a={v:ctl.a}; var b={v:ctl.b}; var r={v:Math.max(ctl.r,a.v+0.01)}; var S=(V.v*I.v)/(2*Math.PI*(r.v/1000)*(r.v/1000)*Math.log(b.v/a.v)); var rel=V.lc/V.v+I.lc/I.v+2*0.01; return {Y:S/1000,Yunit:'kW/m² (radial Poynting flux at r)',dY:Math.abs(S/1000)*rel,pct:rel*100}; }
+  },
+  {
+    id:"waveguide-cutoff-frequency", kind:"experiment", category:"EM Waves & Propagation", title:"Rectangular Waveguide — TE₁₀ Mode & Cutoff Frequency",
+    aim:"To compute the cutoff frequency of the dominant TE₁₀ mode of a rectangular waveguide from its broad-wall dimension, and determine whether a given signal frequency will propagate or be evanescently attenuated.",
+    formula:"f_c(TE₁₀) = c / (2a)",
+    controls:[{key:"a",label:"a",name:"Waveguide broad-wall dimension",unit:"cm",min:1,max:10,default:2.29,step:0.05},{key:"f",label:"f",name:"Signal frequency",unit:"GHz",min:1,max:20,default:9,step:0.1}],
+    resultSymbol:"f_c", resultUnitHint:"",
+    sweepKey:"a",
+    compute: function(ctl){ var a={v:ctl.a/100}; var f={v:ctl.f}; var c=2.998e8; var fc=c/(2*a.v); var rel=a.lc/(ctl.a); var propagates = (f.v*1e9)>fc; return {Y:fc/1e9,Yunit:'GHz (cutoff); signal '+(propagates?'PROPAGATES':'is EVANESCENT (below cutoff)'),dY:Math.abs(fc/1e9)*rel,pct:rel*100}; }
+  },
+  {
+    id:"transmission-line-impedance-vswr", kind:"experiment", category:"EM Waves & Propagation", title:"Transmission Lines — Characteristic Impedance, Reflection & VSWR",
+    aim:"To compute the reflection coefficient and voltage standing-wave ratio (VSWR) on a transmission line of characteristic impedance Z₀ terminated in a mismatched load impedance Z_L.",
+    formula:"Γ = (Z_L − Z₀)/(Z_L + Z₀) ,   VSWR = (1+|Γ|)/(1−|Γ|)",
+    controls:[{key:"Z0",label:"Z₀",name:"Line characteristic impedance",unit:"Ω",min:25,max:150,default:50,step:1},{key:"ZL",label:"Z_L",name:"Load impedance (resistive)",unit:"Ω",min:5,max:500,default:75,step:1}],
+    resultSymbol:"VSWR", resultUnitHint:"",
+    sweepKey:"ZL",
+    compute: function(ctl){ var Z0={v:ctl.Z0}; var ZL={v:ctl.ZL}; var gamma=(ZL.v-Z0.v)/(ZL.v+Z0.v); var vswr=(1+Math.abs(gamma))/(1-Math.abs(gamma)+1e-9); var rel=Z0.lc/Z0.v+ZL.lc/ZL.v; return {Y:vswr,Yunit:'(VSWR, dimensionless \u2265 1); \u0393='+gamma.toFixed(3),dY:Math.abs(vswr)*rel,pct:rel*100}; }
+  },
+  {
+    id:"faraday-cage-shielding-effectiveness", kind:"experiment", category:"EM Waves & Propagation", title:"Electrostatic & EM Shielding Effectiveness of a Faraday Cage",
+    aim:"To compute the shielding effectiveness of a conducting enclosure (Faraday cage) as a function of wall thickness, conductivity and frequency, via the skin-depth attenuation of the incident field inside the conductor.",
+    formula:"SE (dB) = 8.69 × t / δ ,   δ = √(2 / (ωμσ))",
+    controls:[{key:"t",label:"t",name:"Wall / mesh thickness",unit:"mm",min:0.05,max:5,default:1,step:0.05},{key:"sigma",label:"σ",name:"Wall conductivity",unit:"×10⁶ S/m",min:1,max:60,default:35,step:1},{key:"f",label:"f",name:"Field frequency",unit:"MHz",min:0.1,max:1000,default:100,step:1}],
+    resultSymbol:"SE", resultUnitHint:"",
+    sweepKey:"f",
+    compute: function(ctl){ var t={v:ctl.t/1000}; var sig={v:ctl.sigma*1e6}; var f={v:ctl.f*1e6}; var mu0=1.2566e-6; var w=2*Math.PI*f.v; var delta=Math.sqrt(2/(w*mu0*sig.v)); var SE=8.69*t.v/delta; var rel=t.lc/(ctl.t)+0.5*f.lc/(ctl.f)+0.5*sig.lc/(ctl.sigma); return {Y:SE,Yunit:'dB (shielding effectiveness); \u03b4='+(delta*1e6).toFixed(2)+' \u00b5m',dY:Math.abs(SE)*rel,pct:rel*100}; }
+  },
+  {
+    id:"wsEMC", kind:"workshop", category:"Industrial Workshops", title:"WS1: EMI/EMC Compliance Testing",
+    scenario:"You are a compliance test engineer at a consumer-electronics company. A new switch-mode power supply must pass radiated-emission limits before it can be sold. Your job is to tune the product's shielding and filtering until the measured emission spectrum stays under the regulatory limit line across the required frequency band.",
+    controls:[{key:"shield_effectiveness",label:"Shielding effectiveness",unit:"dB",min:0,max:80,optimal:45,tolerance:15,default:40.0},{key:"filter_cutoff",label:"EMI filter cutoff frequency",unit:"kHz",min:10,max:500,optimal:150,tolerance:60,default:255.0},{key:"ground_quality",label:"Ground-plane quality index",unit:"%",min:0,max:100,optimal:85,tolerance:20,default:50.0}]
+  },
+  {
+    id:"wsTransformer", kind:"workshop", category:"Industrial Workshops", title:"WS2: Transformer Design & Testing",
+    scenario:"You are asked to design a step-down transformer for a specified turns ratio and to minimize losses. Adjust the primary/secondary turns, core material, and winding parameters until the transformer delivers the required output voltage with maximum efficiency and acceptably low core loss.",
+    controls:[{key:"turns_ratio",label:"Turns ratio N₁:N₂ (target set by task)",unit:"",min:2,max:20,optimal:10,tolerance:2,default:11.0},{key:"core_permeability",label:"Core relative permeability",unit:"×10³",min:1,max:10,optimal:5,tolerance:2,default:5.5},{key:"winding_resistance",label:"Winding resistance (per winding)",unit:"mΩ",min:10,max:500,optimal:80,tolerance:40,default:255.0}]
+  },
+  {
+    id:"wsAntenna", kind:"workshop", category:"Industrial Workshops", title:"WS3: Antenna Radiation Pattern & Gain Optimization",
+    scenario:"You are optimizing a dipole antenna array for a communications link. Adjust the element length, spacing, and phasing to maximize gain in the desired direction while keeping the sidelobe level and beamwidth within the specified mission requirements.",
+    controls:[{key:"element_length",label:"Element length (in wavelengths)",unit:"λ",min:0.3,max:1.0,optimal:0.5,tolerance:0.1,default:0.65},{key:"element_spacing",label:"Array element spacing",unit:"λ",min:0.25,max:1.0,optimal:0.5,tolerance:0.15,default:0.625},{key:"phase_shift",label:"Inter-element phase shift",unit:"°",min:0,max:180,optimal:0,tolerance:30,default:90.0}]
+  },
+  {
+    id:"wsEddyNDT", kind:"workshop", category:"Industrial Workshops", title:"WS4: Eddy-Current Non-Destructive Testing",
+    scenario:"You are a quality-control inspector using eddy-current testing to find hidden cracks in an aluminium aircraft panel without damaging it. Tune the probe's coil frequency and lift-off distance to maximize flaw sensitivity while keeping the background signal noise low enough to avoid false alarms.",
+    controls:[{key:"probe_frequency",label:"Probe coil frequency",unit:"kHz",min:1,max:500,optimal:100,tolerance:40,default:250.5},{key:"lift_off",label:"Probe lift-off distance",unit:"mm",min:0.1,max:5,optimal:0.5,tolerance:0.3,default:2.55},{key:"gain",label:"Signal amplifier gain",unit:"dB",min:0,max:60,optimal:30,tolerance:12,default:30.0}]
+  },
+  {
+    id:"wsShielding", kind:"workshop", category:"Industrial Workshops", title:"WS5: Magnetic Shielding Enclosure Design",
+    scenario:"You must design a mu-metal enclosure to protect a sensitive magnetometer from stray laboratory fields. Choose the shield material, thickness, and number of nested layers to achieve the required shielding factor without making the enclosure impractically large or expensive.",
+    controls:[{key:"shield_permeability",label:"Shield material relative permeability",unit:"×10³",min:1,max:100,optimal:50,tolerance:20,default:50.5},{key:"shield_thickness",label:"Shield wall thickness",unit:"mm",min:0.2,max:5,optimal:1.5,tolerance:0.7,default:2.6},{key:"num_layers",label:"Number of nested shield layers",unit:"",min:1,max:4,optimal:2,tolerance:1,default:2.5}]
+  },
+  {
+    id:"wsHV", kind:"workshop", category:"Industrial Workshops", title:"WS6: High-Voltage Insulation & Breakdown (Paschen) Testing",
+    scenario:"You are testing the insulation of a high-voltage gas-filled switchgear enclosure. Adjust the gas pressure and electrode gap to keep the system operating safely below its breakdown voltage, using the Paschen curve to avoid the dangerous low-pressure breakdown minimum.",
+    controls:[{key:"gas_pressure",label:"Gas pressure",unit:"kPa",min:1,max:300,optimal:100,tolerance:40,default:150.5},{key:"electrode_gap",label:"Electrode gap",unit:"mm",min:0.5,max:20,optimal:8,tolerance:3,default:10.25},{key:"applied_voltage",label:"Applied test voltage",unit:"kV",min:1,max:50,optimal:20,tolerance:8,default:25.5}]
+  },
+  {
+    id:"wsVSWR", kind:"workshop", category:"Industrial Workshops", title:"WS7: RF Impedance Matching & VSWR Minimization",
+    scenario:"You are commissioning an RF transmitter feeding an antenna through a coaxial cable. Tune a matching network (adjustable reactive elements) so that the load impedance seen by the transmitter is as close as possible to the cable's characteristic impedance, minimizing the voltage standing-wave ratio (VSWR) and reflected power.",
+    controls:[{key:"match_reactance_shunt",label:"Shunt matching reactance",unit:"Ω",min:-200,max:200,optimal:0,tolerance:40,default:0.0},{key:"match_reactance_series",label:"Series matching reactance",unit:"Ω",min:-200,max:200,optimal:0,tolerance:40,default:0.0},{key:"load_resistance",label:"Load resistance seen at antenna feed",unit:"Ω",min:10,max:200,optimal:50,tolerance:15,default:105.0}]
+  },
+  {
+    id:"wsPFC", kind:"workshop", category:"Industrial Workshops", title:"WS8: Power-Factor Correction Capacitor Bank Sizing",
+    scenario:"A factory's inductive machine load is dragging its power factor down, incurring utility penalties. You must size a shunt capacitor bank and select its switching stages so that the plant's power factor is corrected close to unity without overcorrecting into leading-VAR territory that would also attract a penalty.",
+    controls:[{key:"capacitor_kvar",label:"Capacitor bank rating",unit:"kVAR",min:50,max:500,optimal:280,tolerance:40,default:150.0},{key:"switching_stages",label:"Number of switched stages",unit:"",min:1,max:8,optimal:4,tolerance:1,default:2.5},{key:"target_pf",label:"Resulting power factor ×100",unit:"",min:70,max:100,optimal:98,tolerance:3,default:85.0}]
+  },
+  {
+    id:"wsSurge", kind:"workshop", category:"Industrial Workshops", title:"WS9: Surge Arrester & Lightning Protection Coordination",
+    scenario:"You are coordinating surge protection for a substation. Select the arrester's protective (clamping) voltage level and lead-length margin so that the protected equipment's insulation is never exposed to a voltage above its withstand rating during a lightning-induced surge, while keeping the arrester from conducting during normal system overvoltages.",
+    controls:[{key:"clamping_voltage",label:"Arrester clamping (protective) voltage",unit:"kV",min:5,max:100,optimal:36,tolerance:8,default:60.0},{key:"lead_length",label:"Arrester lead length",unit:"m",min:0.1,max:3,optimal:0.5,tolerance:0.2,default:1.7},{key:"insulation_margin",label:"Protective margin over withstand rating",unit:"%",min:0,max:60,optimal:20,tolerance:8,default:35.0}]
+  },
+  {
+    id:"wsHallSensor", kind:"workshop", category:"Industrial Workshops", title:"WS10: Hall-Effect Current Sensor Calibration",
+    scenario:"You are calibrating a Hall-effect current sensor for an EV motor-drive inverter. Adjust the sensor's core air-gap, bias current and amplifier gain so that its output tracks the true primary current linearly over the full rated range with minimal offset error.",
+    controls:[{key:"air_gap",label:"Core air-gap",unit:"mm",min:0.2,max:5,optimal:1.5,tolerance:0.5,default:3.2},{key:"bias_current",label:"Hall-element bias current",unit:"mA",min:1,max:20,optimal:8,tolerance:2,default:14.0},{key:"amp_gain",label:"Output amplifier gain",unit:"V/T",min:10,max:200,optimal:100,tolerance:25,default:55.0}]
+  },
+  {
+    id:"wsWaveguideFeed", kind:"workshop", category:"Industrial Workshops", title:"WS11: Waveguide Feed Design for a Radar Front-End",
+    scenario:"You are designing the waveguide feed for a radar transmitter. Choose the waveguide broad-wall dimension and operating frequency margin above cutoff so that only the dominant TE₁₀ mode propagates with low attenuation, avoiding both evanescent cutoff and higher-order mode breakthrough.",
+    controls:[{key:"broad_wall_a",label:"Waveguide broad-wall dimension a",unit:"cm",min:1,max:8,optimal:2.29,tolerance:0.4,default:4.0},{key:"freq_margin",label:"Operating frequency above cutoff",unit:"%",min:0,max:100,optimal:30,tolerance:10,default:60.0},{key:"insertion_loss",label:"Resulting insertion loss",unit:"dB",min:0,max:10,optimal:0.5,tolerance:0.3,default:3.0}]
+  },
+  {
+    id:"wsQuench", kind:"workshop", category:"Industrial Workshops", title:"WS12: Superconducting Magnet Quench-Protection Design",
+    scenario:"You are designing the quench-protection system for a superconducting magnet coil. Set the dump-resistor value and detection threshold so that, if the coil quenches (loses superconductivity), the stored magnetic energy is safely extracted within the coil's thermal and voltage limits without nuisance-tripping during normal ramp-up.",
+    controls:[{key:"dump_resistance",label:"Dump resistor value",unit:"mΩ",min:5,max:200,optimal:80,tolerance:20,default:140.0},{key:"detection_threshold",label:"Quench-voltage detection threshold",unit:"mV",min:10,max:500,optimal:100,tolerance:30,default:250.0},{key:"discharge_time",label:"Resulting energy discharge time constant",unit:"s",min:0.5,max:30,optimal:8,tolerance:3,default:18.0}]
+  }
+];
+
+</script>
+<script>
+/* ===== Animated physical-model renderers =====
+   Each function draws one experiment/workshop's apparatus on a canvas,
+   driven by the current slider values (ctl) and a continuously running
+   clock (t, in seconds) so wires carry moving current, waves propagate,
+   coils spin fields, magnets swing, etc. Nothing here is a static "dot on
+   a graph" — every panel shows a labelled physical system in motion. */
+var MODEL_ENGINE = (function(){
+"use strict";
+
+function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+function lerp(a,b,f){ return a+(b-a)*f; }
+function sgn(v){ return v<0?-1:1; }
+
+function bg(ctx,w,h,isDark){
+  ctx.fillStyle = isDark ? "#0a1826" : "#0d2233";
+  ctx.fillRect(0,0,w,h);
+}
+function title(ctx,s,w,isDark){
+  ctx.fillStyle = isDark ? "#f2d9a6" : "#f2d9a6";
+  ctx.font = "700 15px Fraunces, serif";
+  ctx.textAlign = "left";
+  ctx.fillText(s, 16, 24);
+}
+function caption(ctx,s,w,h){
+  ctx.fillStyle = "#9fb0c4";
+  ctx.font = "12px 'Source Sans 3', sans-serif";
+  ctx.textAlign = "center";
+  var maxW = w - 40;
+  if(ctx.measureText(s).width <= maxW){
+    ctx.fillText(s, w/2, h-10);
+    return;
+  }
+  /* balanced 2-line wrap: choose the split point (a space) whose two resulting
+     lines are as close to equal width as possible, rather than greedily filling
+     line 1 to the max — this avoids orphaning a short trailing word/symbol. */
+  var words = s.split(" ");
+  var bestSplit = 1, bestDiff = Infinity;
+  for(var k=1;k<words.length;k++){
+    var l1 = words.slice(0,k).join(" "), l2 = words.slice(k).join(" ");
+    var w1 = ctx.measureText(l1).width, w2 = ctx.measureText(l2).width;
+    if(w1>maxW || w2>maxW) continue;
+    var diff = Math.abs(w1-w2);
+    if(diff < bestDiff){ bestDiff = diff; bestSplit = k; }
+  }
+  var line1 = words.slice(0,bestSplit).join(" "), line2 = words.slice(bestSplit).join(" ");
+  if(ctx.measureText(line1).width > maxW || ctx.measureText(line2).width > maxW){
+    line1=""; line2="";
+    for(var i=0;i<words.length;i++){
+      var test = (line1? line1+" ":"") + words[i];
+      if(ctx.measureText(test).width <= maxW || !line1){ line1=test; } else { line2 = words.slice(i).join(" "); break; }
+    }
+  }
+  ctx.fillText(line1, w/2, h-24);
+  ctx.fillText(line2, w/2, h-8);
+}
+function label(ctx,s,x,y,color,size,align){
+  ctx.fillStyle = color || "#dde6ec";
+  ctx.font = (size||12)+"px 'JetBrains Mono', monospace";
+  ctx.textAlign = align || "left";
+  ctx.fillText(s,x,y);
+}
+function line(ctx,x1,y1,x2,y2,color,lw,dash){
+  ctx.save();
+  ctx.strokeStyle = color; ctx.lineWidth = lw||1.5;
+  if(dash) ctx.setLineDash(dash);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  ctx.restore();
+}
+function arrow(ctx,x1,y1,x2,y2,color,lw){
+  ctx.save();
+  ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lw||2;
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  var ang = Math.atan2(y2-y1,x2-x1);
+  var ah = 4+lw*1.4;
+  ctx.beginPath();
+  ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-ah*Math.cos(ang-0.42), y2-ah*Math.sin(ang-0.42));
+  ctx.lineTo(x2-ah*Math.cos(ang+0.42), y2-ah*Math.sin(ang+0.42));
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+function circ(ctx,x,y,r,fill,stroke,lw){
+  ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2);
+  if(fill){ ctx.fillStyle = fill; ctx.fill(); }
+  if(stroke){ ctx.strokeStyle = stroke; ctx.lineWidth = lw||1.4; ctx.stroke(); }
+}
+function chargeGlyph(ctx,x,y,r,q){
+  var pos = q>=0;
+  circ(ctx,x,y, r, pos?"#c0392b":"#1f6fb2", "#081a26", 1.4);
+  ctx.strokeStyle = "#fdf6e7"; ctx.lineWidth = Math.max(1.6, r*0.22);
+  ctx.beginPath(); ctx.moveTo(x-r*0.5,y); ctx.lineTo(x+r*0.5,y); ctx.stroke();
+  if(pos){ ctx.beginPath(); ctx.moveTo(x,y-r*0.5); ctx.lineTo(x,y+r*0.5); ctx.stroke(); }
+}
+function dashedCircle(ctx,cx,cy,r,color,lw){
+  ctx.save(); ctx.setLineDash([4,4]);
+  ctx.strokeStyle=color; ctx.lineWidth=lw||1;
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
+  ctx.restore();
+}
+function flowDots(ctx,x1,y1,x2,y2,speedSign,t,color,n,phase){
+  n = n||6;
+  var dx=x2-x1, dy=y2-y1, len=Math.hypot(dx,dy);
+  if(len<1) return;
+  var ux=dx/len, uy=dy/len;
+  for(var i=0;i<n;i++){
+    var f = (( (i/n) + speedSign*t*0.35 + (phase||0) ) % 1 + 1) % 1;
+    var px = x1+ux*len*f, py = y1+uy*len*f;
+    circ(ctx,px,py,2.6,color,null);
+  }
+}
+
+var DRAW = {};
+
+/* ---------------- 1. Coulomb's Law ---------------- */
+DRAW["coulombs-law"] = function(ctx,w,h,ctl,cfg){
+  bg(ctx,w,h); title(ctx,"Torsion-balance analogue: two point charges on an insulating rail",w);
+  var q1=ctl.q1, q2=ctl.q2, r=ctl.r, epsr=ctl.epsr||1;
+  var railY=h*0.52, midX=w/2;
+  var rPx = clamp(r*8,40,300);
+  var x1=midX-rPx/2, x2=midX+rPx/2;
+  line(ctx,60,railY,w-60,railY,"#3a5670",3);
+  for(var i=60;i<w-60;i+=18){ line(ctx,i,railY,i-8,railY+10,"#22374a",1); }
+  var r1 = clamp(10+Math.abs(q1)*0.7,10,30), r2 = clamp(10+Math.abs(q2)*0.7,10,30);
+  chargeGlyph(ctx,x1,railY-r1-2,r1,q1);
+  chargeGlyph(ctx,x2,railY-r2-2,r2,q2);
+  var repulsive = (q1*q2)>=0;
+  var k=8.988, F = k*q1*q2/(Math.max(0.01,r*r))/Math.max(1,epsr);
+  var mag = clamp(Math.abs(F)*4,6,70);
+  if(Math.abs(q1)>0.01 && Math.abs(q2)>0.01){
+    if(repulsive){
+      arrow(ctx,x1,railY-r1-2,x1-mag,railY-r1-2, "#c9a227",3);
+      arrow(ctx,x2,railY-r2-2,x2+mag,railY-r2-2, "#c9a227",3);
+    } else {
+      arrow(ctx,x1,railY-r1-2,x1+mag,railY-r1-2, "#2e8b6a",3);
+      arrow(ctx,x2,railY-r2-2,x2-mag,railY-r2-2, "#2e8b6a",3);
+    }
+  }
+  for(var k2=0;k2<3;k2++){ dashedCircle(ctx,x1,railY-r1-2, r1+8+k2*7, q1>=0?"rgba(192,57,43,.35)":"rgba(31,111,178,.35)",1); }
+  for(var k3=0;k3<3;k3++){ dashedCircle(ctx,x2,railY-r2-2, r2+8+k3*7, q2>=0?"rgba(192,57,43,.35)":"rgba(31,111,178,.35)",1); }
+  label(ctx, "εr = "+epsr.toFixed(1)+" medium", midX, railY+34, "#9fb0c4", 12, "center");
+  caption(ctx, repulsive ? "Like charges → repulsive force (gold arrows push apart)" : "Unlike charges → attractive force (green arrows pull together)", w,h);
+};
+
+/* ---------------- 2. Electric dipole ---------------- */
+DRAW["dipole-field-potential"] = function(ctx,w,h,ctl,cfg){
+  bg(ctx,w,h); title(ctx,"Electric dipole: field lines and a rotating probe",w);
+  var cx=w*0.42, cy=h*0.55;
+  var a2 = ctl.a2, q=ctl.q;
+  var sepPx = clamp(a2*12,20,220);
+  var qr = clamp(8+Math.abs(q)*1.1,8,22);
+  var px1=cx-sepPx/2, px2=cx+sepPx/2;
+  chargeGlyph(ctx,px1,cy, qr, -Math.abs(q)||-0.001);
+  chargeGlyph(ctx,px2,cy, qr, Math.abs(q)||0.001);
+  if(q<0){ var tmp=px1; px1=px2; px2=tmp; chargeGlyph(ctx,px1,cy,qr,q<0?-Math.abs(q):Math.abs(q)); }
+  // field lines from + to -
+  var posX = q>=0?px2:px1, negX = q>=0?px1:px2;
+  ctx.strokeStyle="#3aa0d8"; ctx.lineWidth=1.2;
+  for(var i=-4;i<=4;i++){
+    if(i===0) continue;
+    var a0 = i*0.32;
+    ctx.beginPath();
+    for(var s=0;s<=40;s++){
+      var frac=s/40;
+      var bow = Math.sin(frac*Math.PI)*(60+Math.abs(i)*10)*(a0>0?1:-1)*0.4;
+      var xx = lerp(posX,negX,frac);
+      var yy = cy + Math.sin(frac*Math.PI)*a0*70 - bow*0.15;
+      if(s===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+    }
+    ctx.stroke();
+  }
+  // probe
+  var theta = (ctl.theta||0)*Math.PI/180;
+  var rProbe = clamp(ctl.r*3.4,40,240);
+  var probeX = cx + rProbe*Math.cos(theta-Math.PI/2);
+  var probeY = cy + rProbe*Math.sin(theta-Math.PI/2);
+  dashedCircle(ctx,cx,cy,rProbe,"rgba(255,255,255,.15)",1);
+  circ(ctx,probeX,probeY,5,"#f2d9a6","#081a26",1.2);
+  var Efac = clamp(30, 20, 60);
+  arrow(ctx,probeX,probeY,probeX+Efac*Math.cos(theta-Math.PI/2),probeY+Efac*Math.sin(theta-Math.PI/2)-30,"#e8534a",2.4);
+  label(ctx,"probe P (θ="+(ctl.theta||0).toFixed(0)+"°)", probeX+10, probeY-10, "#f2d9a6", 11);
+  caption(ctx,"Field lines run from + to −; red arrow shows E at the probe point", w,h);
+};
+
+/* ---------------- 3. Gauss's law flux ---------------- */
+DRAW["gauss-law-flux"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Gaussian surface enclosing charge, pierced by flux lines",w);
+  var cx=w*0.46, cy=h*0.56;
+  var Rpx = clamp(ctl.radius*4.2,40,170);
+  var shape = ctl.shape||"sphere";
+  ctx.strokeStyle="#c9a227"; ctx.lineWidth=2;
+  if(shape==="sphere"){ circ(ctx,cx,cy,Rpx,null,"#c9a227",2); }
+  else if(shape==="cube"){ ctx.strokeRect(cx-Rpx*0.85,cy-Rpx*0.85,Rpx*1.7,Rpx*1.7); }
+  else { // cylinder
+    ctx.beginPath(); ctx.ellipse(cx,cy-Rpx*0.8,Rpx*0.8,Rpx*0.25,0,0,Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(cx,cy+Rpx*0.8,Rpx*0.8,Rpx*0.25,0,0,Math.PI*2); ctx.stroke();
+    line(ctx,cx-Rpx*0.8,cy-Rpx*0.8,cx-Rpx*0.8,cy+Rpx*0.8,"#c9a227",2);
+    line(ctx,cx+Rpx*0.8,cy-Rpx*0.8,cx+Rpx*0.8,cy+Rpx*0.8,"#c9a227",2);
+  }
+  var Qenc = ctl.Qenc, Qout = ctl.Qout;
+  chargeGlyph(ctx,cx,cy, clamp(8+Math.abs(Qenc)*0.7,8,26), Qenc);
+  var nLines = clamp(Math.round(Math.abs(Qenc)),0,16);
+  var outward = Qenc>=0;
+  var speed = outward?1:-1;
+  for(var i=0;i<Math.max(nLines,1);i++){
+    var ang = (i/Math.max(nLines,1))*Math.PI*2 + t*0.15*speed*0;
+    var x1=cx, y1=cy, x2=cx+Math.cos(ang)*(Rpx+55), y2=cy+Math.sin(ang)*(Rpx+55)*0.85;
+    if(nLines>0){
+      ctx.strokeStyle="rgba(58,160,216,.55)"; ctx.lineWidth=1.2;
+      ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+      flowDots(ctx,x1,y1,x2,y2,speed,t,"#3aa0d8",3,i*0.13);
+    }
+  }
+  // outside charge, its flux enters and exits without net contribution
+  var outAng = Math.PI*1.35;
+  var oX = cx+Math.cos(outAng)*(Rpx+90), oY = cy+Math.sin(outAng)*(Rpx+90)*0.85;
+  chargeGlyph(ctx,oX,oY, clamp(6+Math.abs(Qout)*0.5,6,18), Qout);
+  label(ctx,"Q_out (outside surface — net flux contribution = 0)", oX, oY+26, "#9fb0c4",10,"center");
+  label(ctx,"shape: "+shape, cx, cy+Rpx+40, "#9fb0c4", 12, "center");
+  caption(ctx, nLines? (outward?"Charge positive → flux lines point outward":"Charge negative → flux lines point inward") : "No enclosed charge → zero net flux", w,h);
+};
+
+/* ---------------- 4. Parallel plate capacitor ---------------- */
+DRAW["parallel-plate-capacitor"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Parallel-plate capacitor with insertable dielectric slab",w);
+  var cx=w/2, cy=h*0.55;
+  var plateH = 170, gap = clamp(ctl.d*14,26,220);
+  var x1=cx-gap/2, x2=cx+gap/2;
+  var V = ctl.V;
+  ctx.fillStyle="#c9a227";
+  ctx.fillRect(x1-10,cy-plateH/2,10,plateH);
+  ctx.fillStyle="#1f6fb2";
+  ctx.fillRect(x2,cy-plateH/2,10,plateH);
+  label(ctx,"+  +  +  +",x1-5,cy-plateH/2-8,"#c9a227",13,"center");
+  label(ctx,"−  −  −  −",x2+5,cy-plateH/2-8,"#1f6fb2",13,"center");
+  var epsr = ctl.epsr;
+  if(epsr>1){
+    var slabW = gap*0.55;
+    var greenAmt = clamp((epsr-1)/79,0,1);
+    ctx.fillStyle = "rgba("+Math.round(lerp(230,90,greenAmt))+","+Math.round(lerp(230,170,greenAmt))+","+Math.round(lerp(255,90,greenAmt))+",0.55)";
+    ctx.fillRect(cx-slabW/2,cy-plateH/2+6,slabW,plateH-12);
+    ctx.strokeStyle="rgba(255,255,255,.4)"; ctx.strokeRect(cx-slabW/2,cy-plateH/2+6,slabW,plateH-12);
+    label(ctx,"dielectric εr="+epsr.toFixed(1), cx, cy+plateH/2+22, "#dde6ec",12,"center");
+    // induced bound charge hint
+    label(ctx,"−",cx-slabW/2+8,cy-plateH/2+22,"#1f6fb2",13,"center");
+    label(ctx,"+",cx+slabW/2-8,cy-plateH/2+22,"#c9a227",13,"center");
+  }
+  var nLines = 6;
+  for(var i=0;i<nLines;i++){
+    var yy = cy-plateH/2+18 + i*((plateH-36)/(nLines-1));
+    arrow(ctx,x1,yy,x2-6,yy,"rgba(255,215,120,.7)",1.6);
+  }
+  label(ctx,"V = "+V.toFixed(1)+" V", cx, cy-plateH/2-24, "#f2d9a6",13,"center");
+  caption(ctx,"Field lines run + → −; inserting a dielectric increases capacitance and stores more charge for the same V", w,h);
+};
+
+/* ---------------- 5. Van de Graaff / conductors ---------------- */
+DRAW["conductors-charge-distribution"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Van de Graaff generator: belt charges the dome",w);
+  var baseX=w*0.32, baseY=h*0.86, topY=h*0.18;
+  var Rpx = clamp(ctl.R*2.2,26,90);
+  var domeCx=baseX, domeCy=topY+Rpx;
+  line(ctx,baseX-40,baseY,baseX+40,baseY,"#3a5670",4);
+  line(ctx,baseX-18,domeCy+Rpx-4,baseX-18,baseY,"#c9c2a8",5);
+  line(ctx,baseX+18,domeCy+Rpx-4,baseX+18,baseY,"#c9c2a8",5);
+  circ(ctx,baseX-18,baseY-10,8,"#5a6570",null);
+  circ(ctx,baseX+18,domeCy+Rpx-4,8,"#5a6570",null);
+  var rate=ctl.rate, time=ctl.time;
+  var Qc = clamp(rate*time,0,1200);
+  var Vkv = 8.988*Qc/Math.max(10,ctl.R)/1000;
+  var chargeFrac = clamp(Vkv/40,0,1);
+  circ(ctx,domeCx,domeCy,Rpx, "rgba("+Math.round(lerp(90,230,chargeFrac))+",210,140,0.9)", "#f2d9a6",2);
+  for(var i=0;i<12;i++){
+    var ang=(i/12)*Math.PI*2 - Math.PI/2;
+    var px=domeCx+Math.cos(ang)*(Rpx+2), py=domeCy+Math.sin(ang)*(Rpx+2);
+    label(ctx,"+",px,py+4,"#c0392b",13,"center");
+  }
+  var beltSpeed = clamp(rate/4,0.4,4);
+  for(var b=0;b<8;b++){
+    var f = ((b/8)+t*0.25*beltSpeed)%1;
+    var by = lerp(baseY-10, domeCy+Rpx-6, f);
+    var bx = baseX-18 + (f<0.5? 0 : 0);
+    circ(ctx,baseX-18,by,3,"#e8c766",null);
+  }
+  if(chargeFrac>0.9 && (Math.sin(t*30)>0.6)){
+    line(ctx,domeCx+Rpx,domeCy, domeCx+Rpx+40+Math.random()*10, domeCy-10+Math.random()*20,"#fff",2.4);
+  }
+  var tipX = domeCx+Rpx+60, tipY=domeCy;
+  circ(ctx,tipX,tipY, clamp(ctl.pointRadius*2,3,18), "#8a94a0","#dde6ec",1);
+  label(ctx,"test tip r="+ctl.pointRadius.toFixed(1)+"mm", tipX, tipY+22, "#9fb0c4",10,"center");
+  label(ctx,"V ≈ "+Vkv.toFixed(1)+" kV on dome", domeCx, domeCy-Rpx-16, "#f2d9a6",13,"center");
+  caption(ctx,"Belt (gold dots) carries charge up to the dome; a sharp tip discharges the field via point-discharge", w,h);
+};
+
+/* ---------------- 6. Biot-Savart wire ---------------- */
+DRAW["biot-savart-wire"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Straight current-carrying wire and its circular magnetic field",w);
+  var cx=w/2, cy=h*0.55;
+  var I=ctl.I, a=ctl.a, L=ctl.L;
+  var Lpx = clamp(L*2.2,60,340);
+  line(ctx,cx-Lpx/2,cy,cx+Lpx/2,cy,"#c9c2a8",5);
+  flowDots(ctx,cx-Lpx/2,cy,cx+Lpx/2,cy,sgn(I),t,"#f2d9a6",10);
+  arrow(ctx,cx-Lpx*0.15*sgn(I),cy,cx+Lpx*0.15*sgn(I),cy,"#f2d9a6",0.1);
+  var apx = clamp(a*4.2,20,170);
+  var mu0=4*Math.PI*1e-7, am=a*1e-2;
+  var B = mu0*I/(2*Math.PI*am)*1e5;
+  var into = (I>=0); // by right-hand rule, above the wire field comes OUT of the page for I to the right
+  for(var ring=1;ring<=3;ring++){
+    dashedCircle(ctx,cx,cy, apx*ring/2 + apx*0.5, "rgba(58,160,216,.35)",1.2);
+  }
+  circ(ctx,cx,cy-apx,5,"#f2d9a6","#081a26",1.2);
+  label(ctx,"P (a="+a.toFixed(1)+"cm)",cx,cy-apx-12,"#f2d9a6",11,"center");
+  var sym = into? "⊙" : "⊗";
+  for(var i=0;i<3;i++){
+    label(ctx, sym, cx-40+i*40, cy-apx, "#3aa0d8", 18, "center");
+    label(ctx, (into?"⊗":"⊙"), cx-40+i*40, cy+apx, "#3aa0d8", 18, "center");
+  }
+  arrow(ctx,cx,cy-apx,cx+ (into?0:0), cy-apx, "transparent",0.1);
+  label(ctx,"B ≈ "+B.toFixed(2)+"×10⁻⁵ T at P (out of / into page shown by ⊙ / ⊗)", cx, h-46, "#9fb0c4",11,"center");
+  caption(ctx, I>=0 ? "Current flows left→right (gold dots); field circles per the right-hand rule" : "Current reversed (right→left); field circulation reverses", w,h);
+};
+
+/* ---------------- 7. Circular coil / Helmholtz ---------------- */
+DRAW["circular-coil-helmholtz"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Circular current loop(s) — axial field probe",w);
+  var cy=h*0.55;
+  var Rpx = clamp(ctl.R*4.5,30,150);
+  var sep = clamp(ctl.separation*4.5,20,180);
+  var isHelm = true;
+  var c1x = w/2-sep/2, c2x = w/2+sep/2;
+  function coil(cx){
+    ctx.save(); ctx.translate(cx,cy);
+    ctx.strokeStyle="#c9a227"; ctx.lineWidth=4;
+    ctx.beginPath(); ctx.ellipse(0,0,Rpx*0.28,Rpx,0,0,Math.PI*2); ctx.stroke();
+    ctx.restore();
+    flowDots(ctx,cx,cy-Rpx,cx,cy+Rpx,sgn(ctl.I),t,"#f2d9a6",6);
+  }
+  coil(c1x); coil(c2x);
+  var N=ctl.N;
+  label(ctx,"N="+Math.round(N)+" turns each", w/2, cy+Rpx+40, "#9fb0c4",12,"center");
+  var xProbe = clamp(ctl.x*4.5, -Rpx*2.2, Rpx*2.2);
+  var probeX = w/2 + xProbe;
+  circ(ctx,probeX,cy,5,"#e8534a","#081a26",1);
+  arrow(ctx,c1x,cy,c2x,cy, sgn(ctl.I)>0?"rgba(58,160,216,.7)":"rgba(232,83,74,.7)",1.6);
+  for(var i=1;i<=3;i++){
+    var yoff=i*16;
+    line(ctx,c1x,cy-yoff,c2x,cy-yoff,"rgba(58,160,216,.28)",1.2);
+    line(ctx,c1x,cy+yoff,c2x,cy+yoff,"rgba(58,160,216,.28)",1.2);
+  }
+  label(ctx,"probe x="+ctl.x.toFixed(0)+"cm", probeX, cy-Rpx-16, "#f2d9a6",11,"center");
+  caption(ctx,"Two coils "+ctl.separation.toFixed(0)+"cm apart approximate a Helmholtz pair — field is most uniform midway when d ≈ R", w,h);
+};
+
+/* ---------------- 8. Ampere's law solenoid/toroid ---------------- */
+DRAW["ampere-law-solenoid-toroid"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h);
+  var showToroid = ctl.probePos===2;
+  if(!showToroid){
+    title(ctx,"Solenoid: densely wound coil and its near-uniform interior field",w);
+    var cy=h*0.55, len=340, rad=70;
+    var x1=w/2-len/2, x2=w/2+len/2;
+    var n = clamp(ctl.n,5,100);
+    var turns = Math.round(n*len/220*0.5)+8;
+    for(var i=0;i<turns;i++){
+      var xx = x1 + (i/(turns-1))*len;
+      ctx.strokeStyle="#c9a227"; ctx.lineWidth=2.4;
+      ctx.beginPath(); ctx.ellipse(xx,cy,10,rad,0,0,Math.PI*2); ctx.stroke();
+    }
+    flowDots(ctx,x1,cy-rad,x2,cy-rad,sgn(ctl.I),t,"#f2d9a6",8);
+    var nLines=5;
+    for(var l=0;l<nLines;l++){
+      var yy = cy - rad*0.7 + l*(rad*1.4/(nLines-1));
+      arrow(ctx,x1+15,yy,x2-15,yy, sgn(ctl.I)>0?"rgba(58,160,216,.8)":"rgba(232,83,74,.8)",1.6);
+    }
+    var probeX = ctl.probePos===0 ? w/2 : x2+30;
+    circ(ctx,probeX,cy,5,"#f2d9a6","#081a26",1);
+    label(ctx,"probe: "+(ctl.probePos===0?"centre":"outside")+"  |  n="+ctl.n.toFixed(0)+" turns/cm, I="+ctl.I.toFixed(1)+"A", w/2, h-46, "#9fb0c4",11,"center");
+    caption(ctx,"Field is strong & uniform inside, ~zero outside — exactly what Ampère's law predicts", w,h);
+  } else {
+    title(ctx,"Toroid: current confines the field entirely inside the doughnut",w);
+    var cx=w/2, cyy=h*0.56;
+    var Rt = clamp(ctl.toroidR*4,50,160);
+    dashedCircle(ctx,cx,cyy,Rt,"rgba(255,255,255,.25)",1.5);
+    var n2 = 24;
+    for(var k=0;k<n2;k++){
+      var ang=(k/n2)*Math.PI*2 + t*0.2*sgn(ctl.I);
+      var px=cx+Math.cos(ang)*Rt, py=cyy+Math.sin(ang)*Rt*0.55;
+      ctx.strokeStyle="#c9a227"; ctx.lineWidth=2.4;
+      ctx.beginPath(); ctx.ellipse(px,py,7,20,ang,0,Math.PI*2); ctx.stroke();
+    }
+    for(var m=0;m<3;m++){
+      var rr=Rt*0.55+m*Rt*0.15;
+      dashedCircle(ctx,cx,cyy,rr,"rgba(58,160,216,.4)",1);
+    }
+    label(ctx,"N="+ctl.toroidN.toFixed(0)+" turns, I="+ctl.I.toFixed(1)+"A", cx, cyy+Rt*0.65+34, "#9fb0c4",12,"center");
+    caption(ctx,"Field circulates inside the torus only — nothing leaks outside", w,h);
+  }
+};
+
+/* ---------------- 9. Force between parallel conductors ---------------- */
+DRAW["force-parallel-conductors"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Two parallel current-carrying wires attract or repel",w);
+  var cy0=h*0.55;
+  var dPx = clamp(ctl.d*8,40,260);
+  var same = ctl.direction===0;
+  var mu0=4*Math.PI*1e-7, dm=ctl.d*1e-2;
+  var F = mu0*ctl.I1*ctl.I2/(2*Math.PI*dm)*1e5;
+  var attract = same;
+  var wobble = attract ? Math.min(0, -clamp(Math.abs(F)*0.4,0,26)) : clamp(Math.abs(F)*0.4,0,26);
+  var x1=w/2-dPx/2 - (attract? wobble*0:0), x2=w/2+dPx/2;
+  var sep = dPx + (attract? -Math.min(dPx*0.3,26) : Math.min(60,Math.abs(F)*0.6));
+  x1 = w/2-sep/2; x2=w/2+sep/2;
+  line(ctx,x1,cy0-110,x1,cy0+110,"#c9c2a8",5);
+  line(ctx,x2,cy0-110,x2,cy0+110,"#c9c2a8",5);
+  flowDots(ctx,x1,cy0-110,x1,cy0+110, ctl.I1>=0?1:-1, t, "#f2d9a6",8);
+  flowDots(ctx,x2,cy0-110,x2,cy0+110, (same? (ctl.I2>=0?1:-1) : -(ctl.I2>=0?1:-1)), t, "#f2d9a6",8);
+  arrow(ctx,x1,cy0+120,x1,cy0+150,"#3aa0d8",2.4);
+  arrow(ctx,x2,cy0+ (same?120:150), x2, cy0+(same?150:120), "#3aa0d8",2.4);
+  var fmag = clamp(Math.abs(F)*3,8,60);
+  if(attract){ arrow(ctx,x1,cy0,x1+fmag,cy0,"#2e8b6a",3); arrow(ctx,x2,cy0,x2-fmag,cy0,"#2e8b6a",3); }
+  else { arrow(ctx,x1,cy0,x1-fmag,cy0,"#c9a227",3); arrow(ctx,x2,cy0,x2+fmag,cy0,"#c9a227",3); }
+  label(ctx,"I₁="+ctl.I1.toFixed(1)+"A", x1, cy0-125,"#f2d9a6",11,"center");
+  label(ctx,"I₂="+ctl.I2.toFixed(1)+"A", x2, cy0-125,"#f2d9a6",11,"center");
+  caption(ctx, attract? "Same direction → wires attract (green arrows)" : "Opposite directions → wires repel (gold arrows)", w,h);
+};
+
+/* ---------------- 10. Faraday induction ---------------- */
+DRAW["faraday-induction"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Bar magnet approaching a coil — induced current on the galvanometer",w);
+  var cy=h*0.52;
+  var coilX = w*0.62;
+  var coilR = clamp(70*Math.sqrt(ctl.area/20), 35, 110);
+  var mu = ctl.coreMu;
+  var coreSpanX0 = coilX-20-16, coreSpanX1 = coilX+20+16;
+  var coreH = coilR*0.62;
+  var coreColor;
+  if(mu<1){ var f0=mu; coreColor = "rgba("+Math.round(58+ (1-f0)*0)+","+Math.round(120-(1-f0)*40)+","+Math.round(180+(1-f0)*20)+","+(0.10+0.22*(1-f0))+")"; }
+  else { var f1=clamp((mu-1)/0.7,0,1); coreColor = "rgba("+Math.round(150+f1*100)+","+Math.round(140+f1*40)+","+Math.round(70-f1*40)+","+(0.14+0.28*f1)+")"; }
+  ctx.fillStyle = coreColor;
+  ctx.fillRect(coreSpanX0, cy-coreH/2, coreSpanX1-coreSpanX0, coreH);
+  ctx.strokeStyle = "rgba(200,200,210,.35)"; ctx.lineWidth=1; ctx.strokeRect(coreSpanX0, cy-coreH/2, coreSpanX1-coreSpanX0, coreH);
+  for(var i=-2;i<=2;i++){
+    ctx.strokeStyle="#c9a227"; ctx.lineWidth=3;
+    ctx.beginPath(); ctx.ellipse(coilX+i*10,cy,16,coilR,0,0,Math.PI*2); ctx.stroke();
+  }
+  var speed = ctl.speed;
+  var phase = (t*speed*2)%200;
+  var magnetX = w*0.12 + (phase<100? phase : 200-phase)*1.7;
+  magnetX = clamp(magnetX, 40, coilX-90);
+  ctx.fillStyle="#c0392b"; ctx.fillRect(magnetX-40,cy-18,40,36);
+  ctx.fillStyle="#1f6fb2"; ctx.fillRect(magnetX,cy-18,40,36);
+  label(ctx,"N",magnetX-20,cy+6,"#fff",13,"center");
+  label(ctx,"S",magnetX+20,cy+6,"#fff",13,"center");
+  var dist = coilX-40-magnetX;
+  var approaching = (phase<100);
+  var fluxRate = clamp(ctl.Bmax/Math.max(5,dist)*speed,0,60);
+  var emf = ctl.N*ctl.Bmax*speed/1000*mu;
+  var galX = w*0.85, galY=cy, galR=42;
+  circ(ctx,galX,galY,galR,"#0e2a3d","#f2d9a6",2);
+  var needleMax = 175*Math.PI/180;
+  var needleAng = clamp((approaching?1:-1)*fluxRate*0.03*mu, -needleMax, needleMax);
+  arrow(ctx,galX,galY,galX+Math.sin(needleAng)*32, galY-Math.cos(needleAng)*32, "#e8534a",2.6);
+  label(ctx,"G",galX,galY+58,"#9fb0c4",12,"center");
+
+  var coilEdgeX = coilX+36;
+  var topStubY = cy - coilR*0.55, botStubY = cy + coilR*0.55;
+  var topWireY = cy - 34, botWireY = cy + 34;
+  var termX = galX - galR + 4;
+  var termTopY = galY - 16, termBotY = galY + 16;
+  var wireColor = "#c9c2a8";
+  ctx.strokeStyle=wireColor; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(coilEdgeX,topStubY); ctx.lineTo(coilEdgeX,topWireY); ctx.lineTo(termX,topWireY); ctx.lineTo(termX,termTopY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(coilEdgeX,botStubY); ctx.lineTo(coilEdgeX,botWireY); ctx.lineTo(termX,botWireY); ctx.lineTo(termX,termBotY); ctx.stroke();
+  circ(ctx,termX,termTopY,3,"#f2d9a6",null); circ(ctx,termX,termBotY,3,"#f2d9a6",null);
+
+  var dir = approaching?1:-1;
+  flowDots(ctx,coilEdgeX,topStubY,coilEdgeX,topWireY, dir,t,"#3aa0d8",2);
+  flowDots(ctx,coilEdgeX,topWireY,termX,topWireY, dir,t,"#3aa0d8",5);
+  flowDots(ctx,termX,topWireY,termX,termTopY, dir,t,"#3aa0d8",2);
+  flowDots(ctx,coilEdgeX,botStubY,coilEdgeX,botWireY, -dir,t,"#3aa0d8",2);
+  flowDots(ctx,coilEdgeX,botWireY,termX,botWireY, -dir,t,"#3aa0d8",5);
+  flowDots(ctx,termX,botWireY,termX,termBotY, -dir,t,"#3aa0d8",2);
+
+  label(ctx,"N="+ctl.N.toFixed(0)+"  v="+ctl.speed.toFixed(0)+"cm/s  A="+ctl.area.toFixed(0)+"cm²  μᵣ="+mu.toFixed(1)+" (χ="+(mu-1).toFixed(1)+")  ε≈"+emf.toFixed(2)+"mV", w/2, h-46, "#9fb0c4",11,"center");
+  caption(ctx, approaching?"Magnet approaching → flux increasing → induced current opposes it (Lenz's law)":"Magnet receding → flux decreasing → induced current reverses", w,h);
+};
+
+/* ---------------- Method of Images: charge near grounded plane ---------------- */
+DRAW["image-charge-grounded-plane"] = function(ctx,w,h,ctl,cfg){
+  bg(ctx,w,h); title(ctx,"Point charge above an infinite grounded conducting plane",w);
+  var planeY = h*0.62;
+  var cx = w*0.5;
+  var dPx = clamp(ctl.d*9, 30, 170);
+  var qY = planeY - dPx;
+  var qr = clamp(8+ctl.q*0.3, 9, 22);
+  // grounded plane
+  line(ctx,20,planeY,w-20,planeY,"#c9c2a8",2.4);
+  ctx.save(); ctx.strokeStyle="#8a94a6"; ctx.lineWidth=1.2;
+  for(var gx=20; gx<w-20; gx+=14){ ctx.beginPath(); ctx.moveTo(gx,planeY); ctx.lineTo(gx-8,planeY+12); ctx.stroke(); }
+  ctx.restore();
+  label(ctx,"grounded conducting plane (V=0)", w/2, planeY+30, "#9fb0c4", 11, "center");
+  // real charge
+  chargeGlyph(ctx,cx,qY,qr,Math.abs(ctl.q));
+  label(ctx,"+q", cx, qY-qr-8, "#f2d9a6", 12, "center");
+  // image charge (mirrored, faded/dashed to show it's fictitious)
+  var imgY = planeY + dPx;
+  ctx.save(); ctx.globalAlpha=0.42;
+  chargeGlyph(ctx,cx,imgY,qr,-Math.abs(ctl.q));
+  ctx.restore();
+  dashedCircle(ctx,cx,imgY,qr+5,"rgba(232,83,74,.5)",1.2);
+  label(ctx,"−q (image, fictitious)", cx, imgY+qr+16, "#9fb0c4", 10.5, "center");
+  line(ctx,cx,qY,cx,imgY,"rgba(255,255,255,.14)",1,[3,4]);
+  label(ctx,"d="+ctl.d.toFixed(1)+"cm", cx+14, (qY+planeY)/2, "#9fb0c4", 10.5,"left");
+  // field lines curving from +q down onto the plane (perpendicular at plane)
+  ctx.strokeStyle="#3aa0d8"; ctx.lineWidth=1.2;
+  for(var i=-4;i<=4;i++){
+    if(i===0){ line(ctx,cx,qY,cx,planeY,"#3aa0d8",1.2); continue; }
+    var spread = i*14;
+    ctx.beginPath();
+    for(var s=0;s<=30;s++){
+      var f=s/30;
+      var xx = lerp(cx, cx+spread*1.6, Math.sin(f*Math.PI/2));
+      var yy = lerp(qY, planeY, f);
+      if(s===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+    }
+    ctx.stroke();
+  }
+  // attractive force arrow on +q, pointing down toward the plane
+  arrow(ctx,cx,qY+qr+4,cx,qY+qr+4+34,"#e8534a",2.6);
+  var F = 8.988*ctl.q*ctl.q/((2*ctl.d)*(2*ctl.d));
+  label(ctx,"F≈"+F.toFixed(2)+"×10⁻⁹ N, attractive (as if pulled by −q at depth d)", w/2, h-46, "#9fb0c4",11,"center");
+  caption(ctx,"Image charge −q at depth d makes the plane an equipotential V=0 — field lines above the plane meet it at right angles", w,h);
+};
+
+/* ---------------- Multipole expansion: linear quadrupole ---------------- */
+DRAW["multipole-expansion-quadrupole"] = function(ctx,w,h,ctl,cfg){
+  bg(ctx,w,h); title(ctx,"Linear electric quadrupole: +q, −2q, +q on axis",w);
+  var cy=h*0.55;
+  var aPx = clamp(ctl.a*22, 20, 140);
+  var cx = w*0.34;
+  var x1=cx-aPx, x2=cx, x3=cx+aPx;
+  var qr = clamp(7+ctl.q*0.35, 8, 20);
+  chargeGlyph(ctx,x1,cy,qr,Math.abs(ctl.q));
+  chargeGlyph(ctx,x2,cy,qr*1.25,-2*Math.abs(ctl.q));
+  chargeGlyph(ctx,x3,cy,qr,Math.abs(ctl.q));
+  label(ctx,"+q",x1,cy-qr-8,"#f2d9a6",11,"center");
+  label(ctx,"−2q",x2,cy-qr*1.25-8,"#f2d9a6",11,"center");
+  label(ctx,"+q",x3,cy-qr-8,"#f2d9a6",11,"center");
+  line(ctx,x1,cy+qr+10,x2,cy+qr+10,"rgba(255,255,255,.25)",1,[3,3]);
+  line(ctx,x2,cy+qr+10,x3,cy+qr+10,"rgba(255,255,255,.25)",1,[3,3]);
+  label(ctx,"a",(x1+x2)/2,cy+qr+22,"#9fb0c4",10.5,"center");
+  label(ctx,"a",(x2+x3)/2,cy+qr+22,"#9fb0c4",10.5,"center");
+  // far field point on axis
+  var rPx = clamp(ctl.r*3.2, 60, w*0.55);
+  var probeX = clamp(x3+rPx, x3+40, w-40);
+  circ(ctx,probeX,cy,4.5,"#e8534a","#081a26",1);
+  line(ctx,x3,cy,probeX,cy,"rgba(255,255,255,.18)",1,[2,4]);
+  label(ctx,"P (r="+ctl.r.toFixed(0)+"cm on axis)",probeX,cy-16,"#f2d9a6",11,"center");
+  var Vq = 3*8.988*ctl.q*ctl.a*ctl.a/(ctl.r*ctl.r*ctl.r);
+  label(ctx,"V_quad(r) ∝ 1/r³  ⇒  V≈"+Vq.toFixed(4)+"×10⁻⁹ V at P", w/2, h-46, "#9fb0c4",11,"center");
+  caption(ctx,"Net charge and net dipole moment are both zero — the quadrupole is the leading term, falling off as 1/r³", w,h);
+};
+
+
+/* ---------------- Magnetic vector potential of a current loop (dipole limit) ---------------- */
+DRAW["magnetic-vector-potential-dipole"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Small current loop — vector potential A at a distant field point",w);
+  var cx=w*0.32, cy=h*0.55;
+  var loopR = clamp(ctl.a*8, 14, 60);
+  ctx.strokeStyle="#c9a227"; ctx.lineWidth=3.4;
+  ctx.beginPath(); ctx.ellipse(cx,cy,loopR,loopR*0.34,0,0,Math.PI*2); ctx.stroke();
+  flowDots(ctx,cx-loopR,cy,cx+loopR,cy,1,t,"#f2d9a6",6);
+  label(ctx,"I="+ctl.I.toFixed(1)+"A loop, a="+ctl.a.toFixed(1)+"cm", cx, cy+loopR*0.34+22, "#9fb0c4",11,"center");
+  // axis
+  line(ctx,cx,cy-90,cx,cy+90,"rgba(255,255,255,.14)",1,[2,4]);
+  arrow(ctx,cx,cy,cx,cy-90,"rgba(255,255,255,.3)",1.4);
+  label(ctx,"axis",cx+10,cy-88,"#7f8ca0",10);
+  // field point P at (r, theta)
+  var rPx = clamp(ctl.r*3.6, 60, w*0.5);
+  var th = ctl.theta*Math.PI/180;
+  var px = cx + rPx*Math.sin(th), py = cy - rPx*Math.cos(th);
+  line(ctx,cx,cy,px,py,"rgba(255,255,255,.18)",1,[2,4]);
+  dashedCircle(ctx,cx,cy,rPx,"rgba(255,255,255,.10)",1);
+  circ(ctx,px,py,5,"#e8534a","#081a26",1);
+  label(ctx,"P (r="+ctl.r.toFixed(0)+"cm, θ="+ctl.theta.toFixed(0)+"°)", px+10, py-6, "#f2d9a6",11,"left");
+  label(ctx,"θ", cx+16, cy-16, "#9fb0c4", 11);
+  // A_phi is azimuthal (out of / into the plane of this page at P) — show with the standard dot/cross convention
+  var outOfPage = Math.sin(th) >= 0;
+  ctx.save();
+  ctx.strokeStyle="#3aa0d8"; ctx.lineWidth=1.6;
+  ctx.beginPath(); ctx.arc(px,py,11,0,Math.PI*2); ctx.stroke();
+  if(outOfPage){
+    circ(ctx,px,py,2.6,"#3aa0d8",null);
+  } else {
+    ctx.beginPath(); ctx.moveTo(px-7,py-7); ctx.lineTo(px+7,py+7); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(px-7,py+7); ctx.lineTo(px+7,py-7); ctx.stroke();
+  }
+  ctx.restore();
+  label(ctx,"A_φ "+(outOfPage?"(out of page)":"(into page)"), px+14, py+16, "#3aa0d8", 10.5,"left");
+  var mu0=1.2566; var A=mu0*ctl.I*ctl.a*ctl.a*Math.sin(th)/(4*ctl.r*ctl.r);
+  label(ctx,"A_φ = μ₀Ia²sinθ/4r² ≈ "+(A*1000).toFixed(3)+"×10⁻⁶ T·cm", w/2, h-46, "#9fb0c4",11,"center");
+  caption(ctx,"A circles the loop axis (azimuthal, ⊙/⊗ shown at P) — its curl gives the familiar dipole B field", w,h);
+};
+
+/* ---------------- Crossed E & B fields: velocity selector + cyclotron motion ---------------- */
+DRAW["cyclotron-velocity-selector"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Velocity selector (crossed E, B) feeding a pure-B cyclotron region",w);
+  var cy=h*0.55;
+  var selX0=40, selX1=w*0.42, cycX1=w-40;
+  // selector region shading + E field arrows (vertical) + B dots (out of page)
+  ctx.fillStyle="rgba(58,160,216,.06)"; ctx.fillRect(selX0,cy-90,selX1-selX0,180);
+  ctx.fillStyle="rgba(232,83,74,.05)"; ctx.fillRect(selX1,cy-90,cycX1-selX1,180);
+  line(ctx,selX1,cy-95,selX1,cy+95,"rgba(255,255,255,.25)",1.4,[4,3]);
+  for(var ex=selX0+18; ex<selX1; ex+=34){ arrow(ctx,ex,cy+70,ex,cy-70,"#e8534a",1.8); }
+  label(ctx,"E", selX0+18, cy-78, "#e8534a",11);
+  function dots(x0,x1,y0,y1,spacing,r,color){
+    for(var xx=x0+spacing/2; xx<x1; xx+=spacing){
+      for(var yy=y0+spacing/2; yy<y1; yy+=spacing){ circ(ctx,xx,yy,r,color,null); }
+    }
+  }
+  dots(selX0,selX1,cy-90,cy+90,26,2,"rgba(58,160,216,.55)");
+  dots(selX1,cycX1,cy-90,cy+90,26,2,"rgba(58,160,216,.55)");
+  label(ctx,"B (out of page)", selX0+18, cy+86, "#3aa0d8",10.5);
+  label(ctx,"velocity selector", (selX0+selX1)/2, cy-104, "#9fb0c4",11,"center");
+  label(ctx,"pure B field", (selX1+cycX1)/2, cy-104, "#9fb0c4",11,"center");
+  // particle path: straight through selector (undeflected, v=E/B), circular once past selX1
+  var v = (ctl.E*1000)/(ctl.B/1000);
+  var rc_m = (ctl.m_over_q*1e-8)*v/(ctl.B/1000);
+  var rcPx = clamp(rc_m*1200, 20, (cycX1-selX1)*0.9);
+  var enterY = cy;
+  line(ctx,selX0,enterY,selX1,enterY,"#f2d9a6",2.2);
+  arrow(ctx,selX1-14,enterY,selX1,enterY,"#f2d9a6",2.2);
+  var orbCx = selX1, orbCy = enterY-rcPx;
+  ctx.strokeStyle="#f2d9a6"; ctx.lineWidth=2.2;
+  ctx.beginPath(); ctx.arc(orbCx,orbCy,rcPx,Math.PI*0.5, Math.PI*0.5 + Math.PI*1.7); ctx.stroke();
+  var pang = (Math.PI*0.5 + (t*1.4)%(Math.PI*1.7));
+  var pX = orbCx+rcPx*Math.cos(pang), pY=orbCy+rcPx*Math.sin(pang);
+  circ(ctx,pX,pY,4.5,"#e8534a","#081a26",1);
+  label(ctx,"r_c="+rc_m.toFixed(3)+"m", orbCx+8, orbCy-rcPx-8, "#9fb0c4",10.5,"left");
+  label(ctx,"v=E/B="+(v/1000).toFixed(1)+"km/s (undeflected ⇒ selected speed)", w/2, h-46, "#9fb0c4",11,"center");
+  caption(ctx,"Only particles with v=E/B pass straight through; in the B-only region they curve on a circle of radius r_c=mv/qB", w,h);
+};
+
+
+/* ---------------- Hall effect: carrier density & sign ---------------- */
+DRAW["hall-effect-carrier-density"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Hall effect: current-carrying slab in a transverse magnetic field",w);
+  var cx=w*0.5, cy=h*0.52;
+  var slabW=220, slabH=90;
+  var x0=cx-slabW/2, x1=cx+slabW/2, y0=cy-slabH/2, y1=cy+slabH/2;
+  ctx.fillStyle="rgba(58,160,216,.10)"; ctx.fillRect(x0,y0,slabW,slabH);
+  ctx.strokeStyle="#c9c2a8"; ctx.lineWidth=2; ctx.strokeRect(x0,y0,slabW,slabH);
+  // B field into the page across the slab
+  for(var bx=x0+16; bx<x1; bx+=26){
+    for(var by=y0+16; by<y1; by+=26){
+      ctx.strokeStyle="rgba(58,160,216,.6)"; ctx.lineWidth=1.4;
+      ctx.beginPath(); ctx.moveTo(bx-5,by-5); ctx.lineTo(bx+5,by+5); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(bx-5,by+5); ctx.lineTo(bx+5,by-5); ctx.stroke();
+    }
+  }
+  label(ctx,"B (into page)", x0, y0-14, "#3aa0d8",11,"left");
+  // conventional current I, left to right, with drifting carrier dots
+  arrow(ctx,x0-30,cy,x0-6,cy,"#f2d9a6",2.2);
+  label(ctx,"I", x0-30, cy-10, "#f2d9a6",12,"left");
+  for(var i=0;i<7;i++){
+    var f = ((i/7) + t*0.25) % 1;
+    var px = lerp(x0+6,x1-6,f);
+    circ(ctx,px,cy,3,"#e8534a",null);
+  }
+  // Lorentz force deflects carriers toward the top edge -> + charge accumulates top, - bottom
+  arrow(ctx,cx,cy,cx,y0+18,"#e8534a",1.8);
+  label(ctx,"F = qv×B", cx+10, cy-14, "#9fb0c4",10.5,"left");
+  for(var i2=0;i2<6;i2++){ label(ctx,"+", x0+18+i2*32, y0+14, "#e8534a",13,"center"); }
+  for(var i3=0;i3<6;i3++){ label(ctx,"−", x0+18+i3*32, y1-8, "#3aa0d8",13,"center"); }
+  // Hall voltage measured across top-bottom
+  line(ctx,x1+24,y0,x1+24,y1,"#c9c2a8",1.6);
+  line(ctx,x1+18,y0,x1+30,y0,"#c9c2a8",1.6);
+  line(ctx,x1+18,y1,x1+30,y1,"#c9c2a8",1.6);
+  circ(ctx,x1+50,cy,14,"#0e2a3d","#f2d9a6",1.6);
+  label(ctx,"V", x1+50, cy+4, "#f2d9a6",12,"center");
+  line(ctx,x1+24,y0,x1+36,cy-14,"#c9c2a8",1.2); line(ctx,x1+24,y1,x1+36,cy+14,"#c9c2a8",1.2);
+  var e=1.602e-19; var VH = (ctl.I/1000)*(ctl.B/1000)/((ctl.n*1e20)*e*(ctl.t/1000));
+  label(ctx,"n="+ctl.n.toFixed(1)+"×10²⁰m⁻³  t="+ctl.t.toFixed(2)+"mm  V_H≈"+(VH*1000).toFixed(2)+"mV", w/2, h-46, "#9fb0c4",11,"center");
+  caption(ctx,"Deflected carriers pile up on one face until the transverse electric field balances the magnetic force — that equilibrium voltage is V_H", w,h);
+};
+
+/* ---------------- Meissner effect: flux expulsion ---------------- */
+DRAW["meissner-effect-flux-expulsion"] = function(ctx,w,h,ctl,cfg){
+  bg(ctx,w,h); title(ctx,"Meissner effect: exponential field decay inside a superconductor",w);
+  var cy=h*0.5;
+  var surfX = w*0.34;
+  ctx.fillStyle="rgba(58,160,216,.06)"; ctx.fillRect(surfX,60,w-surfX-40,h-140);
+  line(ctx,surfX,60,surfX,h-80,"#c9c2a8",2.4);
+  label(ctx,"superconductor (T<T_c)",(surfX+w-40)/2,50,"#9fb0c4",11,"center");
+  label(ctx,"surface",surfX,h-64,"#9fb0c4",10.5,"center");
+  // incoming field lines outside, decaying arrows inside
+  for(var i=-3;i<=3;i++){
+    var yy=cy+i*24;
+    arrow(ctx,surfX-60,yy,surfX-6,yy,"#3aa0d8",1.8);
+  }
+  var maxDepthPx = w-surfX-70;
+  var nArrows=9;
+  for(var k=0;k<nArrows;k++){
+    var xf = k/(nArrows-1);
+    var depthNm = xf*400;
+    var Bfrac = Math.exp(-depthNm/ctl.lambda);
+    if(Bfrac<0.04) continue;
+    var xx = surfX + xf*maxDepthPx;
+    var len = 26*Bfrac;
+    var yy2 = cy;
+    ctx.save(); ctx.globalAlpha = clamp(0.25+Bfrac*0.9,0.1,1);
+    arrow(ctx,xx,yy2,xx+len,yy2,"#3aa0d8",1.6);
+    ctx.restore();
+  }
+  // decay curve B(x) plotted beneath
+  var plotY0=h-96, plotH=54, plotX0=surfX, plotX1=w-40;
+  line(ctx,plotX0,plotY0,plotX1,plotY0,"rgba(255,255,255,.2)",1);
+  ctx.strokeStyle="#e8534a"; ctx.lineWidth=2; ctx.beginPath();
+  for(var s=0;s<=60;s++){
+    var xf2=s/60, depth=xf2*400;
+    var Bf=Math.exp(-depth/ctl.lambda);
+    var px=plotX0+xf2*(plotX1-plotX0), py=plotY0-Bf*plotH;
+    if(s===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+  }
+  ctx.stroke();
+  var xMarkPx = plotX0 + clamp(ctl.x/400,0,1)*(plotX1-plotX0);
+  var BatX = ctl.B0*Math.exp(-ctl.x/ctl.lambda);
+  var yMark = plotY0 - (BatX/ctl.B0)*plotH;
+  circ(ctx,xMarkPx,yMark,4,"#f2d9a6","#081a26",1);
+  line(ctx,xMarkPx,plotY0,xMarkPx,yMark,"rgba(255,255,255,.18)",1,[2,3]);
+  label(ctx,"x="+ctl.x.toFixed(0)+"nm, B≈"+BatX.toFixed(3)+"mT (B₀="+ctl.B0.toFixed(0)+"mT)", w/2, h-46, "#9fb0c4",11,"center");
+  label(ctx,"λ="+ctl.lambda.toFixed(0)+"nm", plotX0+18, plotY0-plotH-6, "#9fb0c4",10.5,"left");
+  caption(ctx,"Screening (eddy) currents in a thin surface layer expel B, decaying as exp(−x/λ) — B is essentially zero deep inside", w,h);
+};
+
+/* ---------------- Eddy-current damping (Lenz's law braking) ---------------- */
+DRAW["eddy-current-damping"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Conducting plate braked by eddy currents in a magnet gap",w);
+  var cy=h*0.52;
+  var gapX0=w*0.38, gapX1=w*0.62;
+  // magnet poles (N top, S bottom) with field into the plate region
+  ctx.fillStyle="#8a3a2a"; ctx.fillRect(gapX0-10,cy-110,gapX1-gapX0+20,26);
+  ctx.fillStyle="#274a7a"; ctx.fillRect(gapX0-10,cy+84,gapX1-gapX0+20,26);
+  label(ctx,"N",(gapX0+gapX1)/2,cy-93,"#fff",12,"center");
+  label(ctx,"S",(gapX0+gapX1)/2,cy+101,"#fff",12,"center");
+  for(var fx=gapX0+8; fx<gapX1; fx+=22){ arrow(ctx,fx,cy-84,fx,cy+84,"#3aa0d8",1.4); }
+  // moving conducting plate sweeping left to right through the gap
+  var plateW=54, plateH=170;
+  var speedPxPerT = 46;
+  var phase=(t*ctl.v*8)%(w+plateW*2) - plateW;
+  var plateX = clamp(phase, -plateW, w) ;
+  var px0 = (w*0.15 + (t*ctl.v*10)) % (w+plateW) - plateW;
+  ctx.fillStyle="rgba(180,190,200,.28)"; ctx.strokeStyle="#c9c2a8"; ctx.lineWidth=1.6;
+  ctx.fillRect(px0,cy-plateH/2,plateW,plateH); ctx.strokeRect(px0,cy-plateH/2,plateW,plateH);
+  arrow(ctx,px0-18,cy,px0-4,cy,"#f2d9a6",2);
+  label(ctx,"v",px0-18,cy-10,"#f2d9a6",12,"left");
+  // eddy current loops on whichever edge is currently crossing the field boundary
+  function eddyLoop(x,y,r,cw){
+    ctx.strokeStyle="#e8534a"; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.ellipse(x,y,r,r*0.7,0,0,Math.PI*2); ctx.stroke();
+    var ang = (t*3*(cw?1:-1))%(Math.PI*2);
+    var hx=x+r*Math.cos(ang), hy=y+r*0.7*Math.sin(ang);
+    arrow(ctx,hx-6*Math.sin(ang)*(cw?1:-1),hy+6*Math.cos(ang)*(cw?1:-1),hx,hy,"#e8534a",1.6);
+  }
+  var leadEdge = px0+plateW, trailEdge = px0;
+  var inGap = (leadEdge>gapX0 && trailEdge<gapX1);
+  if(inGap){
+    if(leadEdge>gapX0 && leadEdge<gapX1){ eddyLoop(leadEdge-8,cy-40,20,true); eddyLoop(leadEdge-8,cy+40,20,false); }
+    if(trailEdge>gapX0 && trailEdge<gapX1){ eddyLoop(trailEdge+8,cy-40,20,false); eddyLoop(trailEdge+8,cy+40,20,true); }
+    // retarding force opposing motion
+    arrow(ctx,px0+plateW/2,cy,px0+plateW/2-30,cy,"#e8534a",2.4);
+    label(ctx,"F_retard (opposes v)", px0+plateW/2-30, cy-40, "#9fb0c4",10.5,"center");
+  }
+  var F = (ctl.sigma*1e6)*(ctl.t/1000)*Math.pow(ctl.B/1000,2)*ctl.v*0.02*0.02;
+  label(ctx,"B="+ctl.B.toFixed(0)+"mT  v="+ctl.v.toFixed(1)+"m/s  σ="+ctl.sigma.toFixed(0)+"×10⁶S/m  F_eddy≈"+(F*1000).toFixed(2)+"mN", w/2, h-46, "#9fb0c4",11,"center");
+  caption(ctx,"As the plate enters/leaves the field, changing flux drives swirling eddy currents whose own field opposes the motion (Lenz's law)", w,h);
+};
+
+
+/* ---------------- RLC filter frequency response ---------------- */
+DRAW["rlc-filter-response"] = function(ctx,w,h,ctl,cfg){
+  bg(ctx,w,h); title(ctx,"Series RLC band-pass filter — |H(f)| response",w);
+  // tiny schematic across the top
+  var schY=52, x0=60,x1=w-60;
+  line(ctx,x0,schY,x0+40,schY,"#c9c2a8",1.6);
+  ctx.strokeStyle="#c9a227"; ctx.lineWidth=1.8;
+  ctx.beginPath();
+  var rx=x0+40, rw=44;
+  for(var i=0;i<7;i++){ var xx=rx+i*(rw/6); var yy=schY+((i%2===0)?-8:8); if(i===0) ctx.moveTo(xx,schY); ctx.lineTo(xx,i===0||i===6?schY:yy); }
+  ctx.stroke();
+  label(ctx,"R",rx+rw/2,schY-16,"#f2d9a6",11,"center");
+  var lx=rx+rw+10;
+  ctx.strokeStyle="#3aa0d8";
+  ctx.beginPath();
+  for(var k=0;k<5;k++){ ctx.arc(lx+10+k*10,schY,5,Math.PI,0,true); }
+  ctx.stroke();
+  label(ctx,"L",lx+25,schY-16,"#3aa0d8",11,"center");
+  var cx0=lx+58;
+  line(ctx,cx0,schY-10,cx0,schY+10,"#e8534a",2); line(ctx,cx0+8,schY-10,cx0+8,schY+10,"#e8534a",2);
+  label(ctx,"C",cx0+4,schY-16,"#e8534a",11,"center");
+  line(ctx,cx0+8,schY,x1,schY,"#c9c2a8",1.6);
+  label(ctx,"in",x0-4,schY+4,"#9fb0c4",10,"right");
+  label(ctx,"out",x1+4,schY+4,"#9fb0c4",10,"left");
+  // frequency response curve, log-x axis
+  var f0 = 1/(2*Math.PI*Math.sqrt((ctl.L/1000)*(ctl.C*1e-6)));
+  var plotX0=60, plotX1=w-60, plotY0=h-40, plotY1=100;
+  line(ctx,plotX0,plotY0,plotX1,plotY0,"rgba(255,255,255,.25)",1);
+  line(ctx,plotX0,plotY0,plotX0,plotY1,"rgba(255,255,255,.25)",1);
+  var fMin=10, fMax=20000;
+  function fx(freq){ return plotX0 + (Math.log10(freq)-Math.log10(fMin))/(Math.log10(fMax)-Math.log10(fMin))*(plotX1-plotX0); }
+  function Hval(freq){ var om=2*Math.PI*freq; var X=om*(ctl.L/1000)-1/(om*(ctl.C*1e-6)); return ctl.R/Math.sqrt(ctl.R*ctl.R+X*X); }
+  ctx.strokeStyle="#3aa0d8"; ctx.lineWidth=2; ctx.beginPath();
+  for(var s=0;s<=120;s++){
+    var lf = Math.log10(fMin)+ (s/120)*(Math.log10(fMax)-Math.log10(fMin));
+    var freq=Math.pow(10,lf);
+    var H=Hval(freq);
+    var px=fx(freq), py=plotY0-H*(plotY0-plotY1);
+    if(s===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+  }
+  ctx.stroke();
+  var xF0=fx(f0);
+  line(ctx,xF0,plotY0,xF0,plotY1,"rgba(242,217,166,.4)",1,[3,3]);
+  label(ctx,"f₀≈"+f0.toFixed(0)+"Hz",xF0,plotY1-8,"#f2d9a6",10.5,"center");
+  var xf=fx(ctl.f), yf=plotY0-Hval(ctl.f)*(plotY0-plotY1);
+  circ(ctx,xf,yf,4.5,"#e8534a","#081a26",1);
+  label(ctx,"f="+ctl.f.toFixed(0)+"Hz, |H|="+Hval(ctl.f).toFixed(3), w/2, h-46, "#9fb0c4",11,"center");
+  caption(ctx,"Series RLC passes frequencies near resonance f₀=1/2π√LC and attenuates those far from it", w,h);
+};
+
+/* ---------------- Poynting vector in a coaxial cable ---------------- */
+DRAW["poynting-vector-coaxial-cable"] = function(ctx,w,h,ctl,cfg){
+  bg(ctx,w,h); title(ctx,"Coaxial cable cross-section — E, H and Poynting flux S = E×H",w);
+  var cx=w*0.42, cy=h*0.54;
+  var scale = clamp(110/ctl.b, 6, 24);
+  var aPx = clamp(ctl.a*scale, 8, 40);
+  var bPx = clamp(ctl.b*scale, aPx+24, 150);
+  ctx.fillStyle="#3a4a5a"; circ(ctx,cx,cy,aPx,"#8a94a6",null);
+  ctx.strokeStyle="#c9c2a8"; ctx.lineWidth=2.4; ctx.beginPath(); ctx.arc(cx,cy,bPx,0,Math.PI*2); ctx.stroke();
+  ctx.fillStyle="rgba(58,160,216,.06)"; ctx.beginPath(); ctx.arc(cx,cy,bPx,0,Math.PI*2); ctx.arc(cx,cy,aPx,0,Math.PI*2,true); ctx.fill();
+  label(ctx,"inner (+), a="+ctl.a.toFixed(1)+"mm", cx, cy+4, "#0e2a3d",9.5,"center");
+  label(ctx,"shield, b="+ctl.b.toFixed(1)+"mm", cx+bPx+8, cy-bPx+4, "#9fb0c4",10.5,"left");
+  // E field radial arrows in the dielectric
+  for(var a0=0;a0<Math.PI*2;a0+=Math.PI/4){
+    var ex1=cx+aPx*1.15*Math.cos(a0), ey1=cy+aPx*1.15*Math.sin(a0);
+    var ex2=cx+bPx*0.92*Math.cos(a0), ey2=cy+bPx*0.92*Math.sin(a0);
+    arrow(ctx,ex1,ey1,ex2,ey2,"#e8534a",1.6);
+  }
+  // H field circumferential (tangential) hint circle
+  dashedCircle(ctx,cx,cy,(aPx+bPx)/2,"rgba(58,160,216,.5)",1.4);
+  label(ctx,"H (circumferential)", cx-(aPx+bPx)/2-4, cy-(aPx+bPx)/2-6, "#3aa0d8",10,"left");
+  // field point at r, S out of the page (dot)
+  var rPx = clamp(ctl.r*scale, aPx+4, bPx-4);
+  var fpx=cx+rPx*Math.cos(-0.7), fpy=cy+rPx*Math.sin(-0.7);
+  ctx.strokeStyle="#f2d9a6"; ctx.lineWidth=1.6; ctx.beginPath(); ctx.arc(fpx,fpy,9,0,Math.PI*2); ctx.stroke();
+  circ(ctx,fpx,fpy,2.4,"#f2d9a6",null);
+  label(ctx,"S (out of page) at r="+ctl.r.toFixed(1)+"mm", fpx+14, fpy-8, "#f2d9a6",10.5,"left");
+  var rm=Math.max(ctl.r,ctl.a+0.01)/1000;
+  var S=(ctl.V*ctl.I)/(2*Math.PI*rm*rm*Math.log(ctl.b/ctl.a));
+  label(ctx,"V="+ctl.V.toFixed(0)+"V  I="+ctl.I.toFixed(1)+"A  S(r)≈"+(S/1000).toFixed(2)+"kW/m²", w/2, h-46, "#9fb0c4",11,"center");
+  caption(ctx,"E is radial, H circles the inner conductor — their cross product S points straight down the cable, carrying the power VI", w,h);
+};
+
+
+/* ---------------- Rectangular waveguide TE10 cutoff ---------------- */
+DRAW["waveguide-cutoff-frequency"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Rectangular waveguide — TE₁₀ mode field pattern across the broad wall",w);
+  var c=2.998e8;
+  var aM = ctl.a/100;
+  var fc = c/(2*aM)/1e9;
+  var propagates = ctl.f > fc;
+  var gx0=w*0.28, gx1=w*0.72, gy0=90, gy1=h-90;
+  ctx.strokeStyle="#c9c2a8"; ctx.lineWidth=3;
+  ctx.strokeRect(gx0,gy0,gx1-gx0,gy1-gy0);
+  label(ctx,"a="+ctl.a.toFixed(2)+"cm (broad wall)", (gx0+gx1)/2, gy1+22, "#9fb0c4",11,"center");
+  // TE10 E-field: half-sine across the broad wall (horizontal), arrows vertical, amplitude ~ sin(pi x/a)
+  var n=11;
+  var animAmp = propagates ? 1 : Math.exp(-2.2);
+  for(var i=1;i<n;i++){
+    var xf=i/n;
+    var ex=gx0+xf*(gx1-gx0);
+    var amp=Math.sin(Math.PI*xf);
+    var phaseMod = propagates ? Math.sin(t*3) : 1;
+    var arrLen = amp*46*(propagates?Math.abs(phaseMod):Math.exp(-((gy1-gy0)*0*0)))*(propagates?1:0.35);
+    var midY=(gy0+gy1)/2;
+    if(propagates){
+      var dirUp = phaseMod>=0;
+      arrow(ctx,ex,midY,ex, midY-arrLen, "#e8534a",1.8);
+    } else {
+      // evanescent: field decays away from the input end (left) instead of forming a travelling pattern
+      var decay = Math.exp(-3*xf);
+      arrow(ctx,ex,midY,ex, midY-amp*46*decay, "rgba(232,83,74,.5)",1.6);
+    }
+  }
+  label(ctx,"E_y(x) ∝ sin(πx/a)", gx0, gy0-10, "#e8534a",10.5,"left");
+  var barY=gy0-40;
+  ctx.fillStyle = propagates ? "#1F6E43" : "#8a3a2a";
+  ctx.fillRect(gx0,barY-10,(gx1-gx0),18);
+  label(ctx, propagates ? "f > f_c  — PROPAGATES" : "f < f_c — EVANESCENT (attenuates)", (gx0+gx1)/2, barY+3, "#fff",11,"center");
+  label(ctx,"f="+ctl.f.toFixed(2)+"GHz   f_c="+fc.toFixed(2)+"GHz", w/2, h-46, "#9fb0c4",11,"center");
+  caption(ctx,"Below cutoff the TE₁₀ mode cannot propagate — the field dies off exponentially instead of travelling down the guide", w,h);
+};
+
+/* ---------------- Transmission line: Z0, reflection, VSWR ---------------- */
+DRAW["transmission-line-impedance-vswr"] = function(ctx,w,h,ctl,cfg){
+  bg(ctx,w,h); title(ctx,"Transmission line terminated in a mismatched load — standing wave envelope",w);
+  var lineY=h*0.42, x0=60, x1=w-140;
+  line(ctx,x0,lineY,x1,lineY,"#c9c2a8",2.2); line(ctx,x0,lineY+10,x1,lineY+10,"#c9c2a8",2.2);
+  label(ctx,"source, Z₀="+ctl.Z0.toFixed(0)+"Ω", x0, lineY-14, "#9fb0c4",11,"left");
+  // load box at the end
+  var loadX=x1+16;
+  ctx.strokeStyle="#c9a227"; ctx.lineWidth=2;
+  ctx.beginPath();
+  for(var i=0;i<8;i++){ var yy=lineY+ (i%2===0?-6:6); var xx=loadX+i*(60/7); if(i===0) ctx.moveTo(loadX,lineY+5); ctx.lineTo(xx,yy+5); }
+  ctx.stroke();
+  label(ctx,"Z_L="+ctl.ZL.toFixed(0)+"Ω", loadX+18, lineY+30, "#f2d9a6",11,"center");
+  line(ctx,loadX+60,lineY,loadX+60,lineY+10,"#c9c2a8",2);
+  // standing-wave envelope
+  var gamma=(ctl.ZL-ctl.Z0)/(ctl.ZL+ctl.Z0);
+  var vswr=(1+Math.abs(gamma))/(1-Math.abs(gamma)+1e-9);
+  var envY0=h*0.72, envAmp=44;
+  var beta = 2*Math.PI/70;
+  ctx.strokeStyle="#3aa0d8"; ctx.lineWidth=1.8; ctx.beginPath();
+  for(var s=0;s<=x1-x0;s++){
+    var xx2=x0+s;
+    var distFromLoad = (x1-xx2);
+    var envelope = Math.sqrt(1+Math.abs(gamma)*Math.abs(gamma)+2*Math.abs(gamma)*Math.cos(2*beta*distFromLoad));
+    var py=envY0-envelope*envAmp*0.45;
+    if(s===0) ctx.moveTo(xx2,py); else ctx.lineTo(xx2,py);
+  }
+  ctx.stroke();
+  ctx.strokeStyle="rgba(58,160,216,.4)"; ctx.beginPath();
+  for(var s2=0;s2<=x1-x0;s2++){
+    var xx3=x0+s2;
+    var distFromLoad2=(x1-xx3);
+    var envelope2 = Math.sqrt(1+Math.abs(gamma)*Math.abs(gamma)+2*Math.abs(gamma)*Math.cos(2*beta*distFromLoad2));
+    var py2=envY0+envelope2*envAmp*0.45;
+    if(s2===0) ctx.moveTo(xx3,py2); else ctx.lineTo(xx3,py2);
+  }
+  ctx.stroke();
+  line(ctx,x0,envY0,x1,envY0,"rgba(255,255,255,.15)",1);
+  label(ctx,"|V(x)| standing-wave envelope", x0, envY0-envAmp-14, "#9fb0c4",11,"left");
+  label(ctx,"Γ="+gamma.toFixed(3)+"   VSWR="+vswr.toFixed(2)+(Math.abs(gamma)<0.02?"  (matched, ≈1)":""), w/2, h-46, "#9fb0c4",11,"center");
+  caption(ctx,"A mismatched load reflects part of the wave; interference between forward and reflected waves sets the standing-wave ratio", w,h);
+};
+
+/* ---------------- Faraday cage shielding effectiveness ---------------- */
+DRAW["faraday-cage-shielding-effectiveness"] = function(ctx,w,h,ctl,cfg){
+  bg(ctx,w,h); title(ctx,"Faraday cage: skin-depth attenuation through the conducting wall",w);
+  var cy=h*0.5;
+  var wallX0=w*0.42, wallW=clamp(ctl.t*30,10,90), wallX1=wallX0+wallW;
+  ctx.fillStyle="rgba(180,190,200,.22)"; ctx.fillRect(wallX0,60,wallW,h-140);
+  ctx.strokeStyle="#c9c2a8"; ctx.lineWidth=1.6; ctx.strokeRect(wallX0,60,wallW,h-140);
+  label(ctx,"wall t="+ctl.t.toFixed(2)+"mm",(wallX0+wallX1)/2,50,"#9fb0c4",11,"center");
+  label(ctx,"outside (incident field)", (60+wallX0)/2, h-64,"#9fb0c4",10.5,"center");
+  label(ctx,"cage interior (shielded)", (wallX1+w-40)/2, h-64,"#9fb0c4",10.5,"center");
+  var mu0=1.2566e-6; var wAng=2*Math.PI*(ctl.f*1e6); var delta=Math.sqrt(2/(wAng*mu0*(ctl.sigma*1e6)));
+  var deltaMm = delta*1000;
+  // incoming full-strength field outside
+  for(var i=-3;i<=3;i++){ arrow(ctx,60,cy+i*20,wallX0-6,cy+i*20,"#3aa0d8",1.8); }
+  // decaying field inside the wall thickness
+  var nA=8;
+  for(var k=0;k<nA;k++){
+    var xf=k/(nA-1);
+    var depthMm = xf*ctl.t;
+    var frac=Math.exp(-depthMm/Math.max(deltaMm,1e-6));
+    if(frac<0.03) continue;
+    var xx=wallX0+xf*wallW;
+    ctx.save(); ctx.globalAlpha=clamp(0.2+frac*0.9,0.08,1);
+    arrow(ctx,xx,cy,xx+14*frac,cy,"#3aa0d8",1.4);
+    ctx.restore();
+  }
+  // residual (essentially none) field beyond the wall
+  var SEdb = 8.69*(ctl.t/1000)/delta;
+  var residual = Math.pow(10,-SEdb/20);
+  if(residual>0.03){ arrow(ctx,wallX1+6,cy,wallX1+6+18*residual,cy,"rgba(58,160,216,.5)",1.4); }
+  label(ctx,"f="+ctl.f.toFixed(1)+"MHz  σ="+ctl.sigma.toFixed(0)+"×10⁶S/m  δ="+deltaMm.toFixed(4)+"mm  SE≈"+SEdb.toFixed(1)+"dB", w/2, h-46, "#9fb0c4",11,"center");
+  caption(ctx,"Induced surface currents cancel the field within about one skin depth δ — thicker walls (t≫δ) give near-total shielding", w,h);
+};
+
+
+/* ---------------- 11. Motional EMF ---------------- */
+DRAW["motional-emf-lenz"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Conducting rod sliding on rails in a magnetic field",w);
+  var cy=h*0.55;
+  var Lpx = clamp(ctl.L*7,40,260);
+  var x1=w*0.2, x2=w*0.8;
+  var topY=cy-Lpx/2, botY=cy+Lpx/2;
+  line(ctx,x1,topY,x2,topY,"#c9c2a8",3);
+  line(ctx,x1,botY,x2,botY,"#c9c2a8",3);
+  line(ctx,x1,topY,x1,botY,"#c9c2a8",4);
+  for(var i=0;i<7;i++){ for(var j=0;j<3;j++){
+    label(ctx,"⊗", x1+40+i*35, topY+20+j*(Lpx-40)/2, "#3aa0d8", 15, "center");
+  }}
+  var v = ctl.v;
+  var rodX = x1 + ((t*v*22)% (x2-x1-40)) + 20;
+  line(ctx,rodX,topY,rodX,botY,"#c0392b",5);
+  arrow(ctx,rodX,cy,rodX+34,cy,"#f2d9a6",2.2);
+  label(ctx,"v", rodX+40, cy-8, "#f2d9a6", 13);
+  var B=ctl.B, R=ctl.R;
+  var eps = B*1e-3*ctl.L*1e-2*v*1000;
+  var I = eps/Math.max(1,R);
+  flowDots(ctx,x1,topY,rodX,topY, 1, t, "#e8c766", Math.max(2,Math.round(rodX-x1)/40));
+  flowDots(ctx,x1,botY,rodX,botY, -1, t, "#e8c766", Math.max(2,Math.round(rodX-x1)/40));
+  var Fmag = clamp(B*1e-3*I*ctl.L*1e-2*4000,4,40);
+  arrow(ctx,rodX,cy,rodX-Fmag,cy,"#2e8b6a",2.4);
+  label(ctx,"F_retard", rodX-Fmag-8, cy-14, "#2e8b6a",10);
+  label(ctx,"ε="+eps.toFixed(2)+"mV   I="+I.toFixed(2)+"A", w/2, h-46, "#9fb0c4",11,"center");
+  caption(ctx,"⊗ field into the page; rod sliding right induces current whose force opposes the motion (Lenz's law)", w,h);
+};
+
+/* ---------------- 12. RC/RL transients ---------------- */
+DRAW["rc-rl-transients"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h);
+  var isRC = ctl.mode===0;
+  title(ctx, isRC? "RC circuit charging a capacitor" : "RL circuit building up current in an inductor", w);
+  var cy=h*0.5;
+  var bx=w*0.15, rx=w*0.42, cx2=w*0.68;
+  line(ctx,bx,cy-70,bx,cy+70,"#c9c2a8",3);
+  label(ctx,"+",bx-14,cy-72,"#c9a227",14);
+  label(ctx,"ε₀="+ctl.eps0.toFixed(0)+"V",bx,cy+92,"#9fb0c4",11,"center");
+  line(ctx,bx,cy-70,rx-30,cy-70,"#c9c2a8",3);
+  line(ctx,bx,cy+70,rx-30,cy+70,"#c9c2a8",3);
+  ctx.strokeStyle="#c9a227"; ctx.lineWidth=3;
+  ctx.strokeRect(rx-30,cy-90,60,20);
+  label(ctx,"R="+ctl.R.toFixed(0)+"kΩ", rx, cy-100, "#f2d9a6",11,"center");
+  line(ctx,rx+30,cy-80,cx2-20,cy-70,"#c9c2a8",3);
+  line(ctx,rx-30,cy+70,cx2-20,cy+70,"#c9c2a8",3);
+  var tau, val, maxLabel;
+  if(isRC){
+    tau = ctl.R*1000*ctl.C*1e-6;
+    val = 1-Math.exp(-((t%(tau*6+0.6))/(Math.max(0.001,tau))));
+    line(ctx,cx2-20,cy-70,cx2-20,cy-14,"#c9c2a8",4);
+    line(ctx,cx2-20,cy+14,cx2-20,cy+70,"#c9c2a8",4);
+    var gapH = 8+val*22;
+    ctx.fillStyle="#c9a227"; ctx.fillRect(cx2-40,cy-14-gapH,40,4);
+    ctx.fillStyle="#1f6fb2"; ctx.fillRect(cx2-40,cy+14+gapH-4,40,4);
+    label(ctx,"C="+ctl.C.toFixed(0)+"μF",cx2,cy+96,"#9fb0c4",11,"center");
+    label(ctx,"charge on plates ∝ (1−e^(−t/τ))",cx2,cy-96,"#9fb0c4",10,"center");
+  } else {
+    tau = ctl.L/(ctl.R*1000);
+    val = 1-Math.exp(-((t%(tau*6+0.6))/(Math.max(0.0001,tau))));
+    for(var i=0;i<6;i++){
+      ctx.strokeStyle="#c9a227"; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.ellipse(cx2-20+i*10,cy,8,26,0,0,Math.PI*2); ctx.stroke();
+    }
+    var glow = clamp(val,0,1);
+    ctx.strokeStyle="rgba(58,160,216,"+(0.2+glow*0.7)+")"; ctx.lineWidth=2;
+    dashedCircle(ctx,cx2+10,cy,50+glow*20,"rgba(58,160,216,"+(0.2+glow*0.7)+")",2);
+    label(ctx,"L="+ctl.L.toFixed(1)+"H",cx2,cy+96,"#9fb0c4",11,"center");
+    label(ctx,"current & field build up ∝ (1−e^(−t/τ))",cx2,cy-96,"#9fb0c4",10,"center");
+  }
+  flowDots(ctx,bx,cy-70,rx-30,cy-70,1,t,"#e8c766",5);
+  label(ctx,"τ="+ (isRC? (tau*1000).toFixed(2)+"ms" : (tau*1000).toFixed(2)+"ms"), w/2, h-46, "#f2d9a6",12,"center");
+  caption(ctx,"Clock loops every 6τ so you can watch the exponential charge/discharge repeat", w,h);
+};
+
+/* ---------------- 13. LCR resonance ---------------- */
+DRAW["lcr-resonance"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Series LCR circuit driven by an AC source",w);
+  var cy=h*0.34;
+  var R=ctl.R,L=ctl.L,C=ctl.C,V0=ctl.V0,freq=ctl.freq;
+  var w0 = 1/Math.sqrt(L*1e-3*C*1e-6);
+  var wdrive = 2*Math.PI*freq;
+  var XL=wdrive*L*1e-3, XC=1/(wdrive*C*1e-6);
+  var Z = Math.sqrt(R*R+(XL-XC)*(XL-XC));
+  var I0 = V0/Math.max(1,Z);
+  var bx=w*0.12,ex=w*0.88;
+  line(ctx,bx,cy,bx+60,cy,"#c9c2a8",3);
+  ctx.strokeStyle="#e8534a"; ctx.beginPath();
+  for(var i=0;i<=40;i++){ var xx=bx+ (i/40)*40; var yy=cy-16*Math.sin(i/40*Math.PI*4+t*wdrive*0.3); if(i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy); }
+  ctx.stroke();
+  label(ctx,"~ AC source", bx+20, cy+30, "#9fb0c4",11,"center");
+  var compX = bx+140;
+  ["R","L","C"].forEach(function(comp,idx){
+    var xx = compX + idx*130;
+    line(ctx,xx-40,cy,xx-20,cy,"#c9c2a8",3);
+    if(comp==="R"){ ctx.strokeStyle="#c9a227"; ctx.lineWidth=3; ctx.strokeRect(xx-20,cy-12,40,24); label(ctx,"R="+R.toFixed(0)+"Ω",xx,cy-24,"#f2d9a6",11,"center"); }
+    if(comp==="L"){ ctx.strokeStyle="#c9a227"; ctx.lineWidth=3; for(var k=0;k<4;k++){ ctx.beginPath(); ctx.arc(xx-15+k*10,cy,8,Math.PI,0); ctx.stroke(); } label(ctx,"L="+L.toFixed(0)+"mH",xx,cy-24,"#f2d9a6",11,"center"); }
+    if(comp==="C"){ ctx.strokeStyle="#c9a227"; ctx.lineWidth=3; line(ctx,xx-6,cy-16,xx-6,cy+16,"#c9a227",3); line(ctx,xx+6,cy-16,xx+6,cy+16,"#c9a227",3); label(ctx,"C="+C.toFixed(1)+"μF",xx,cy-24,"#f2d9a6",11,"center"); }
+    line(ctx,xx+20,cy,xx+40,cy,"#c9c2a8",3);
+  });
+  line(ctx,compX+2*130+20,cy,ex,cy,"#c9c2a8",3);
+  line(ctx,ex,cy,ex,cy+50,"#c9c2a8",3); line(ctx,bx,cy,bx,cy+50,"#c9c2a8",3); line(ctx,bx,cy+50,ex,cy+50,"#c9c2a8",3);
+  var Ifrac = clamp(I0/Math.max(0.001,V0/R),0,1);
+  flowDots(ctx,bx,cy+50,ex,cy+50, 1, t*(1+Ifrac*2), "#3aa0d8", 3+Math.round(Ifrac*8));
+  // meter dial: current amplitude
+  var mx=w*0.5, my=h*0.74, mr=60;
+  ctx.strokeStyle="#5a6570"; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.arc(mx,my,mr,Math.PI,Math.PI*2); ctx.stroke();
+  var maxI = V0/Math.max(1,R);
+  var ang = Math.PI + clamp(I0/Math.max(0.001,maxI),0,1)*Math.PI;
+  arrow(ctx,mx,my,mx+mr*0.85*Math.cos(ang),my+mr*0.85*Math.sin(ang),"#e8534a",3);
+  circ(ctx,mx,my,4,"#f2d9a6",null);
+  label(ctx,"I₀ ≈ "+I0.toFixed(3)+" A", mx, my+26, "#f2d9a6",12,"center");
+  label(ctx,"drive f = "+freq.toFixed(0)+" Hz   f₀ = "+(w0/(2*Math.PI)).toFixed(1)+" Hz", mx, my-mr-14, "#9fb0c4",11,"center");
+  caption(ctx, Math.abs(freq-w0/(2*Math.PI))<w0/(2*Math.PI)*0.08 ? "Near resonance — current amplitude peaks!" : "Off resonance — current amplitude reduced by reactance mismatch", w,h);
+};
+
+/* ---------------- 14. Maxwell plane wave ---------------- */
+DRAW["maxwell-plane-waves"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Self-propagating transverse EM plane wave (E ⊥ B ⊥ v)",w);
+  var cy=h*0.55, x1=40, x2=w-40;
+  var freq=ctl.freq, E0=ctl.E0, phi=(ctl.phaseOffset||0)*Math.PI/180;
+  var k = 10; // spatial frequency for display
+  var speed = 2.2;
+  ctx.strokeStyle="#3a5670"; line(ctx,x1,cy,x2,cy,"#3a5670",1.4);
+  ctx.strokeStyle="#e8534a"; ctx.lineWidth=2.2; ctx.beginPath();
+  for(var i=0;i<=120;i++){
+    var xx=x1+(i/120)*(x2-x1);
+    var yy=cy - (E0/100*70)*Math.sin(i/120*Math.PI*4*(freq/300+0.3) - t*speed);
+    if(i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+  }
+  ctx.stroke();
+  ctx.strokeStyle="#3aa0d8"; ctx.lineWidth=2.2; ctx.beginPath();
+  for(var j=0;j<=120;j++){
+    var xx2=x1+(j/120)*(x2-x1);
+    var yy2=cy - (E0/100*36)*Math.sin(j/120*Math.PI*4*(freq/300+0.3) - t*speed + phi)*0.6 + 0;
+    var zz = (E0/100*36)*Math.sin(j/120*Math.PI*4*(freq/300+0.3) - t*speed + phi);
+    if(j===0) ctx.moveTo(xx2, cy+zz*0.35); else ctx.lineTo(xx2, cy+zz*0.35);
+  }
+  ctx.stroke();
+  arrow(ctx,x2-20,cy,x2+15,cy,"#f2d9a6",2);
+  label(ctx,"c", x2+18, cy+4, "#f2d9a6",12);
+  label(ctx,"E (red, vertical)",x1+10,cy-90,"#e8534a",12);
+  label(ctx,"B (blue, out-of-plane, shown tilted)",x1+10,cy+70,"#3aa0d8",12);
+  label(ctx,"f="+freq.toFixed(0)+"MHz  E₀="+E0.toFixed(0)+"V/m  Δφ="+ (ctl.phaseOffset||0).toFixed(0)+"°", w/2, h-46, "#9fb0c4",11,"center");
+  caption(ctx, Math.abs(ctl.phaseOffset||0)<1 ? "Physically E and B stay in phase — set Δφ=0 for the real Maxwell solution" : "Δφ≠0 is an artificial offset for teaching — real EM waves keep E,B in phase", w,h);
+};
+
+/* ---------------- 15. Wave in media / skin depth ---------------- */
+DRAW["wave-propagation-media-skindepth"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h);
+  var isConductor = ctl.mode===1;
+  title(ctx, isConductor? "EM wave attenuating inside a conductor (skin effect)" : "EM wave slowing down in a dielectric medium", w);
+  var cy=h*0.55, x1=40, x2=w-40, boundary=w*0.42;
+  ctx.fillStyle="rgba(255,255,255,.04)"; ctx.fillRect(x1,cy-90,boundary-x1,180);
+  ctx.fillStyle= isConductor? "rgba(180,120,60,.18)" : "rgba(58,160,216,.12)";
+  ctx.fillRect(boundary,cy-90,x2-boundary,180);
+  line(ctx,boundary,cy-90,boundary,cy+90,"#9fb0c4",1.5,[3,3]);
+  label(ctx,isConductor?"conductor (σ="+ctl.sigma.toFixed(1)+"MS/m)":"dielectric (εr="+ctl.epsr.toFixed(1)+")", boundary+10, cy-100, "#9fb0c4",11);
+  label(ctx,"vacuum", x1+10, cy-100, "#9fb0c4",11);
+  var freq = ctl.freq;
+  var delta = 1;
+  if(isConductor){
+    var wme=2*Math.PI*freq*1e6, mu0=4*Math.PI*1e-7, sig=ctl.sigma*1e6;
+    delta = Math.sqrt(2/(wme*mu0*sig));
+    delta = clamp(delta*1e6/6, 8, 120);
+  }
+  ctx.strokeStyle="#e8534a"; ctx.lineWidth=2.2; ctx.beginPath();
+  var vRatio = isConductor? 1 : 1/Math.sqrt(ctl.epsr);
+  var kIn = 16*(1/vRatio);
+  for(var i=0;i<=140;i++){
+    var xx = x1+(i/140)*(x2-x1);
+    var amp = 55;
+    if(xx>boundary){
+      if(isConductor){ amp = 55*Math.exp(-(xx-boundary)/delta); }
+      else { amp = 55; }
+    }
+    var kk = xx<boundary? 16 : kIn;
+    var yy = cy - amp*Math.sin((xx-x1)/22*kk/16 - t*2.2*(xx<boundary?1:vRatio));
+    if(i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+  }
+  ctx.stroke();
+  if(isConductor){
+    label(ctx,"skin depth δ ≈ "+(delta*6).toFixed(1)+"μm (display-scaled)", w/2, h-46, "#f2d9a6",12,"center");
+  } else {
+    label(ctx,"v_medium = c/√εr → wavelength shortens, frequency unchanged", w/2, h-46, "#9fb0c4",11,"center");
+  }
+  caption(ctx, isConductor? "Amplitude decays exponentially inside the conductor — energy is dissipated as eddy currents" : "Wave slows and compresses (shorter λ) inside the denser dielectric", w,h);
+};
+
+/* ---------------- 16. Reflection/refraction/Brewster ---------------- */
+DRAW["reflection-refraction-brewster"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Ray at a dielectric interface — reflection, refraction, Brewster's angle",w);
+  var cx=w/2, cy=h*0.5;
+  ctx.fillStyle="rgba(58,160,216,.10)"; ctx.fillRect(0,cy,w,h-cy);
+  line(ctx,0,cy,w,cy,"#9fb0c4",1.2);
+  var n1=ctl.n1,n2=ctl.n2, thi=ctl.theta_i*Math.PI/180;
+  var thB = Math.atan(n2/n1);
+  var sinT = clamp(n1/n2*Math.sin(thi),-1,1);
+  var tht = Math.asin(sinT);
+  var Lr = 140;
+  line(ctx,cx-Lr*Math.sin(thi),cy-Lr*Math.cos(thi),cx,cy,"#f2d9a6",2.4);
+  arrow(ctx,cx-Lr*Math.sin(thi),cy-Lr*Math.cos(thi),cx-6,cy-6,"transparent",0.1);
+  arrow(ctx,cx,cy,cx+Lr*Math.sin(thi),cy-Lr*Math.cos(thi),"#e8534a",2.2);
+  arrow(ctx,cx,cy,cx+Lr*Math.sin(tht),cy+Lr*Math.cos(tht),"#3aa0d8",2.2);
+  line(ctx,cx,cy-90,cx,cy+90,"#5a6570",1,[2,3]);
+  label(ctx,"θᵢ",cx-30,cy-40,"#f2d9a6",13);
+  label(ctx,"θᵣ",cx+26,cy-40,"#e8534a",13);
+  label(ctx,"θₜ",cx+26,cy+46,"#3aa0d8",13);
+  label(ctx,"n₁="+n1.toFixed(2), cx-160, cy-16, "#9fb0c4",11);
+  label(ctx,"n₂="+n2.toFixed(2), cx-160, cy+26, "#9fb0c4",11);
+  var atBrewster = Math.abs(ctl.theta_i - thB*180/Math.PI) < 2;
+  if(ctl.polarization===1){
+    var refl = Math.pow((n1*Math.cos(tht)-n2*Math.cos(thi))/(n1*Math.cos(tht)+n2*Math.cos(thi)),2);
+    if(atBrewster) refl = 0;
+    label(ctx,"p-pol reflectance ≈ "+(refl*100).toFixed(1)+"%"+(atBrewster?"  (Brewster — vanishes!)":""), cx, h-46, atBrewster?"#2e8b6a":"#9fb0c4",12,"center");
+  } else {
+    label(ctx,"s-polarization — reflection never fully vanishes", cx, h-46, "#9fb0c4",12,"center");
+  }
+  label(ctx,"Brewster angle θ_B = "+(thB*180/Math.PI).toFixed(1)+"°", cx, cy-100, "#f2d9a6",12,"center");
+  caption(ctx,"Incident ray (gold) splits into reflected (red) and refracted (blue) rays at the interface", w,h);
+};
+
+/* ---------------- 17. Dielectric polarization ---------------- */
+DRAW["dielectric-polarization-clausius-mossotti"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Molecular dipoles aligning under an applied field",w);
+  var cx=w/2, cy=h*0.5, slabW=280, slabH=180;
+  ctx.fillStyle="rgba(120,140,170,.12)"; ctx.fillRect(cx-slabW/2,cy-slabH/2,slabW,slabH);
+  ctx.strokeStyle="#5a6570"; ctx.strokeRect(cx-slabW/2,cy-slabH/2,slabW,slabH);
+  var E=ctl.E, N=ctl.N, alpha=ctl.alpha;
+  var alignFrac = clamp((E*alpha)/300,0,1);
+  var cols=6, rows=4;
+  for(var r=0;r<rows;r++){
+    for(var c=0;c<cols;c++){
+      var mx = cx-slabW/2+30+c*(slabW-60)/(cols-1);
+      var my = cy-slabH/2+26+r*(slabH-50)/(rows-1);
+      var jitter = (1-alignFrac)*(Math.sin(t*2+r*3+c*5)*0.7);
+      var ang = jitter;
+      var len=16;
+      arrow(ctx,mx-len/2*Math.cos(ang),my-len/2*Math.sin(ang),mx+len/2*Math.cos(ang),my+len/2*Math.sin(ang),"#e8534a",1.8);
+    }
+  }
+  for(var i=0;i<5;i++){ arrow(ctx,cx-slabW/2-70,cy-60+i*30,cx-slabW/2-20,cy-60+i*30,"#c9a227",2); }
+  label(ctx,"E applied →", cx-slabW/2-70, cy-80,"#c9a227",12);
+  label(ctx,"−",cx-slabW/2-8,cy,"#1f6fb2",20,"center");
+  label(ctx,"+",cx+slabW/2+8,cy,"#c0392b",20,"center");
+  label(ctx,"bound surface charge", cx, cy+slabH/2+22, "#9fb0c4",11,"center");
+  var x=(N*1e28*alpha*1e-40)/(3*8.854e-12); var epsr=(1+2*x)/(1-x);
+  label(ctx,"N="+N.toFixed(0)+"×10²⁸/m³  α="+alpha.toFixed(0)+"×10⁻⁴⁰  →  εr≈"+epsr.toFixed(2), cx, cy-slabH/2-16, "#f2d9a6",12,"center");
+  caption(ctx,"Higher field / density / polarizability aligns more dipoles, increasing bound charge and εr", w,h);
+};
+
+/* ---------------- 18. Magnetic hysteresis ---------------- */
+DRAW["magnetic-hysteresis-bh-curve"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Magnetic domains flipping as H is cycled — tracing the B–H loop",w);
+  var matNames=["soft iron","ferrite","hard steel"];
+  var mat = Math.round(ctl.material);
+  var loopWidth=[0.15,0.35,0.8][mat];
+  var Hmax=ctl.Hmax;
+  var period = 4; // seconds per full cycle
+  var phase = (t/period)%1;
+  var Hnow = Hmax*Math.sin(phase*Math.PI*2);
+  // domain grid, left half
+  var gx=60, gy=60, gw=280, gh=220;
+  ctx.strokeStyle="#5a6570"; ctx.strokeRect(gx,gy,gw,gh);
+  var rows=5, cols=7;
+  for(var r=0;r<rows;r++){
+    for(var c=0;c<cols;c++){
+      var mx=gx+24+c*(gw-48)/(cols-1), my=gy+24+r*(gh-48)/(rows-1);
+      var localBias = (r+c)%3 - 1;
+      var flipThresh = loopWidth*Hmax*0.3*(localBias);
+      var pointRight = Hnow > flipThresh;
+      var ang = pointRight? 0 : Math.PI;
+      arrow(ctx,mx-10*Math.cos(ang),my-10*Math.sin(ang),mx+10*Math.cos(ang),my+10*Math.sin(ang), pointRight?"#e8534a":"#3aa0d8",2);
+    }
+  }
+  label(ctx,"domains ("+matNames[mat]+")", gx+gw/2, gy-10, "#9fb0c4",11,"center");
+  label(ctx,"H(t)="+Hnow.toFixed(0)+" A/m", gx+gw/2, gy+gh+22, "#f2d9a6",12,"center");
+  // BH loop, right half
+  var lx=w*0.62, ly=h*0.5, lw=260, lh=200;
+  ctx.strokeStyle="#3a5670"; line(ctx,lx-lw/2,ly,lx+lw/2,ly,"#3a5670",1); line(ctx,lx,ly-lh/2,lx,ly+lh/2,"#3a5670",1);
+  label(ctx,"H",lx+lw/2+10,ly+4,"#9fb0c4",11); label(ctx,"B",lx-6,ly-lh/2-8,"#9fb0c4",11);
+  function Bof(Hp,rising){
+    var Hc = loopWidth*Hmax*0.6;
+    var sat = Hmax;
+    var shift = rising? -Hc : Hc;
+    return clamp((Hp+shift)/sat,-1,1)*0.9;
+  }
+  ctx.strokeStyle="#c9a227"; ctx.lineWidth=2; ctx.beginPath();
+  for(var i=0;i<=60;i++){
+    var hh = -Hmax+2*Hmax*i/60;
+    var bb = Bof(hh,true);
+    var xx=lx+ (hh/Hmax)*lw/2, yy=ly-bb*lh/2;
+    if(i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+  }
+  for(var j=0;j<=60;j++){
+    var hh2 = Hmax-2*Hmax*j/60;
+    var bb2 = Bof(hh2,false);
+    var xx2=lx+ (hh2/Hmax)*lw/2, yy2=ly-bb2*lh/2;
+    ctx.lineTo(xx2,yy2);
+  }
+  ctx.stroke();
+  var risingNow = Math.cos(phase*Math.PI*2)>0;
+  var Bnow = Bof(Hnow, risingNow);
+  circ(ctx,lx+(Hnow/Hmax)*lw/2, ly-Bnow*lh/2, 5,"#f2d9a6","#081a26",1.2);
+  caption(ctx,"Domain arrows lag the field (hysteresis); loop area = energy lost as heat per cycle", w,h);
+};
+
+/* ---------------- Workshops ---------------- */
+
+DRAW["wsEMC"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Switch-mode power supply inside a shielded enclosure — radiated emissions",w);
+  var cx=w*0.32, cy=h*0.55, boxW=140,boxH=100;
+  ctx.strokeStyle="#c9c2a8"; ctx.lineWidth = clamp(ctl.shield_effectiveness/12,1,8);
+  ctx.strokeRect(cx-boxW/2,cy-boxH/2,boxW,boxH);
+  ctx.fillStyle="rgba(120,140,170,.1)"; ctx.fillRect(cx-boxW/2,cy-boxH/2,boxW,boxH);
+  label(ctx,"PSU + shield", cx, cy+boxH/2+20, "#9fb0c4",11,"center");
+  var leak = clamp(1-ctl.shield_effectiveness/80,0.03,1);
+  var nWaves = 5;
+  for(var i=0;i<nWaves;i++){
+    var r = 30 + i*22 + (t*40)%22;
+    var alpha = leak*(1-i/nWaves)*0.8;
+    if(r < boxW*1.6){
+      ctx.strokeStyle="rgba(232,83,74,"+alpha.toFixed(2)+")";
+      ctx.beginPath(); ctx.arc(cx,cy,r,-0.9,0.9); ctx.stroke();
+    }
+  }
+  var specX=w*0.62, specY=h*0.72, specW=240, specH=140;
+  ctx.strokeStyle="#5a6570"; ctx.strokeRect(specX-specW/2,specY-specH,specW,specH);
+  var limitY = specY-specH*0.55;
+  line(ctx,specX-specW/2,limitY,specX+specW/2,limitY,"#e8534a",1.6,[5,4]);
+  label(ctx,"regulatory limit",specX+specW/2-4,limitY-6,"#e8534a",10,"right");
+  var cutoffFrac = clamp(ctl.filter_cutoff/500,0,1);
+  ctx.strokeStyle="#3aa0d8"; ctx.lineWidth=2; ctx.beginPath();
+  for(var f=0; f<=60; f++){
+    var frac=f/60;
+    var freqRel = frac;
+    var atten = freqRel>cutoffFrac? Math.pow((freqRel-cutoffFrac)*3,1.3) : 0;
+    var shieldAtten = ctl.shield_effectiveness/80;
+    var groundAtten = ctl.ground_quality/150;
+    var level = leak*(0.9-atten-shieldAtten-groundAtten*0.4)+0.05*Math.sin(frac*30+t*3);
+    level = clamp(level,0.02,1);
+    var xx=specX-specW/2+frac*specW, yy=specY-level*specH*0.9;
+    if(f===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+  }
+  ctx.stroke();
+  label(ctx,"emission spectrum", specX, specY+18, "#9fb0c4",11,"center");
+  caption(ctx,"Raise shielding, ground quality, and lower filter cutoff to pull the spectrum under the limit line", w,h);
+};
+
+DRAW["wsTransformer"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Step-down transformer: primary and secondary windings on a shared core",w);
+  var cx=w/2, cy=h*0.52, coreW=160, coreH=140;
+  ctx.strokeStyle="#c9c2a8"; ctx.lineWidth=10;
+  ctx.strokeRect(cx-coreW/2,cy-coreH/2,coreW,coreH);
+  var ratio = ctl.turns_ratio;
+  var nPri = clamp(Math.round(6+ (20-ratio)*0.3),4,14);
+  var nSec = clamp(Math.round(nPri/ratio*4),2,14);
+  for(var i=0;i<nPri;i++){
+    var yy=cy-coreH/2+10+i*(coreH-20)/(nPri-1);
+    ctx.strokeStyle="#c9a227"; ctx.lineWidth=2.4;
+    ctx.beginPath(); ctx.ellipse(cx-coreW/2,yy,14,7,0,0,Math.PI*2); ctx.stroke();
+  }
+  for(var j=0;j<nSec;j++){
+    var yy2=cy-coreH/2+10+j*(coreH-20)/(nSec-1);
+    ctx.strokeStyle="#3aa0d8"; ctx.lineWidth=2.4;
+    ctx.beginPath(); ctx.ellipse(cx+coreW/2,yy2,14,7,0,0,Math.PI*2); ctx.stroke();
+  }
+  var Vin=120;
+  var Vout = Vin/ratio;
+  var freqDisp=3;
+  ctx.strokeStyle="#c9a227"; ctx.lineWidth=2; ctx.beginPath();
+  for(var s=0;s<=40;s++){ var xx=cx-coreW/2-90+ (s/40)*70; var yy3=cy-40*Math.sin(s/40*Math.PI*freqDisp - t*4); if(s===0) ctx.moveTo(xx,yy3); else ctx.lineTo(xx,yy3); }
+  ctx.stroke();
+  var lossFrac = clamp(ctl.winding_resistance/500,0,1)+clamp(1-ctl.core_permeability/10,0,1)*0.3;
+  var outAmp = clamp(40/ratio*2 * (1-lossFrac*0.5),4,40);
+  ctx.strokeStyle="#3aa0d8"; ctx.lineWidth=2; ctx.beginPath();
+  for(var s2=0;s2<=40;s2++){ var xx2=cx+coreW/2+20+ (s2/40)*70; var yy4=cy-outAmp*Math.sin(s2/40*Math.PI*freqDisp - t*4); if(s2===0) ctx.moveTo(xx2,yy4); else ctx.lineTo(xx2,yy4); }
+  ctx.stroke();
+  label(ctx,"Vin ~"+Vin+"V", cx-coreW/2-55, cy-60, "#c9a227",11,"center");
+  label(ctx,"Vout ~"+Vout.toFixed(0)+"V", cx+coreW/2+55, cy-60, "#3aa0d8",11,"center");
+  var eff = clamp(100*(1-lossFrac),40,99);
+  label(ctx,"N₁:N₂ = "+ratio.toFixed(1)+":1   efficiency ≈ "+eff.toFixed(0)+"%", cx, cy+coreH/2+26, "#f2d9a6",12,"center");
+  caption(ctx,"Higher core permeability & lower winding resistance keep the output waveform clean and efficiency high", w,h);
+};
+
+DRAW["wsAntenna"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Two-element dipole array — radiation pattern",w);
+  var cx=w*0.32, cy=h*0.55;
+  var spacing = clamp(ctl.element_spacing*140,20,180);
+  var elemLen = clamp(ctl.element_length*140,20,160);
+  line(ctx,cx-spacing/2,cy-elemLen/2,cx-spacing/2,cy+elemLen/2,"#c9a227",4);
+  line(ctx,cx+spacing/2,cy-elemLen/2,cx+spacing/2,cy+elemLen/2,"#3aa0d8",4);
+  var phaseShift = (ctl.phase_shift||0)*Math.PI/180;
+  flowDots(ctx,cx-spacing/2,cy-elemLen/2,cx-spacing/2,cy+elemLen/2, Math.sin(t*3)>0?1:-1, t, "#f2d9a6",4);
+  flowDots(ctx,cx+spacing/2,cy-elemLen/2,cx+spacing/2,cy+elemLen/2, Math.sin(t*3+phaseShift)>0?1:-1, t, "#f2d9a6",4);
+  // polar pattern
+  var pcx=w*0.68, pcy=h*0.55, pr=140;
+  ctx.strokeStyle="#3a5670"; dashedCircle(ctx,pcx,pcy,pr,"#3a5670",1);
+  ctx.strokeStyle="#c9a227"; ctx.lineWidth=2; ctx.beginPath();
+  var k = 2*Math.PI*ctl.element_spacing;
+  for(var a=0;a<=120;a++){
+    var ang = a/120*Math.PI*2;
+    var af = k*Math.cos(ang)+phaseShift;
+    var gain = Math.abs(Math.cos(af/2));
+    var r = gain*pr;
+    var xx=pcx+r*Math.cos(ang), yy=pcy+r*Math.sin(ang);
+    if(a===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+  }
+  ctx.closePath(); ctx.stroke();
+  ctx.fillStyle="rgba(200,147,42,.12)"; ctx.fill();
+  label(ctx,"radiation pattern (top view)", pcx, pcy+pr+22, "#9fb0c4",11,"center");
+  label(ctx,"len="+ctl.element_length.toFixed(2)+"λ  d="+ctl.element_spacing.toFixed(2)+"λ  Δφ="+(ctl.phase_shift||0).toFixed(0)+"°", w/2, h-46, "#f2d9a6",11,"center");
+  caption(ctx,"λ/2 elements at λ/2 spacing with zero phase gives the classic broadside/end-fire lobe pattern", w,h);
+};
+
+DRAW["wsEddyNDT"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Eddy-current probe scanning an aluminium panel for hidden cracks",w);
+  var cy=h*0.68, panelY=cy;
+  ctx.fillStyle="#8a94a0"; ctx.fillRect(60,panelY,w-120,50);
+  ctx.strokeStyle="#0e2a3d"; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.moveTo(w*0.55,panelY); ctx.lineTo(w*0.55+10,panelY+50); ctx.stroke();
+  label(ctx,"aluminium panel (hidden crack)", w/2, panelY+70, "#9fb0c4",11,"center");
+  var lift = clamp(ctl.lift_off*10,3,60);
+  var probeX = w*0.3 + ((t*30)%(w*0.5));
+  var probeY = panelY-lift-30;
+  ctx.strokeStyle="#c9a227"; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.ellipse(probeX,probeY,20,26,0,0,Math.PI*2); ctx.stroke();
+  flowDots(ctx,probeX-16,probeY-20,probeX-16,probeY+20,1,t,"#f2d9a6",4);
+  label(ctx,"probe f="+ctl.probe_frequency.toFixed(0)+"kHz", probeX, probeY-36, "#f2d9a6",10,"center");
+  var nearCrack = Math.abs(probeX-(w*0.55+5))<40;
+  var freqFactor = clamp(ctl.probe_frequency/500,0.1,1);
+  var eddyR = clamp(30*(1-lift/60),6,26);
+  for(var i=0;i<3;i++){
+    var rr = eddyR*(1+i*0.4);
+    var alpha = nearCrack? 0.75 : 0.35;
+    ctx.strokeStyle="rgba(58,160,216,"+alpha+")"; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.ellipse(probeX,panelY+15,rr, rr*0.4, 0, t*2*(i%2?1:-1), t*2*(i%2?1:-1)+Math.PI*1.6); ctx.stroke();
+  }
+  var signal = nearCrack ? (0.5+0.5*Math.sin(t*20))*clamp(ctl.gain/60,0.2,1)*freqFactor : 0.05*Math.sin(t*8)*clamp(ctl.gain/60,0.2,1);
+  var scopeX=w*0.72, scopeY=h*0.32, scopeW=220, scopeH=110;
+  ctx.strokeStyle="#5a6570"; ctx.strokeRect(scopeX-scopeW/2,scopeY-scopeH/2,scopeW,scopeH);
+  ctx.strokeStyle="#e8534a"; ctx.lineWidth=2; ctx.beginPath();
+  for(var s=0;s<=60;s++){
+    var xx=scopeX-scopeW/2+ (s/60)*scopeW;
+    var localSig = (s>40 && nearCrack)? signal : 0.05*Math.sin(t*8+s);
+    var yy=scopeY - localSig*scopeH*0.8;
+    if(s===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+  }
+  ctx.stroke();
+  label(ctx,"probe signal", scopeX, scopeY-scopeH/2-8, "#9fb0c4",11,"center");
+  caption(ctx,"Lower lift-off and higher gain sharpen the eddy-current signal as the probe passes over the crack", w,h);
+};
+
+DRAW["wsShielding"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"Mu-metal shield enclosure protecting a magnetometer from stray field",w);
+  var cx=w/2, cy=h*0.55;
+  var layers = clamp(Math.round(ctl.num_layers),1,4);
+  var thick = clamp(ctl.shield_thickness*3,3,20);
+  var baseR=140;
+  for(var i=0;i<layers;i++){
+    ctx.strokeStyle="#c9c2a8"; ctx.lineWidth=thick;
+    circ(ctx,cx,cy, baseR - i*22, null, "#c9c2a8", thick);
+  }
+  // external stray field lines bending around
+  var perm = ctl.shield_permeability;
+  var shieldFactor = clamp((perm/100)*layers*(thick/8),0.2,20);
+  for(var l=-3;l<=3;l++){
+    var yy = cy+l*24;
+    ctx.strokeStyle="rgba(58,160,216,.55)"; ctx.lineWidth=1.6;
+    ctx.beginPath();
+    for(var xx=40; xx<=w-40; xx+=6){
+      var dx = xx-cx;
+      var dist = Math.hypot(dx, yy-cy);
+      var bend = dist<baseR ? (baseR-dist)/baseR * 40/ (1+shieldFactor*0.3) * sgn(l||1) : 0;
+      var yAdj = yy - (dist<baseR? bend : 0);
+      if(xx===40) ctx.moveTo(xx,yAdj); else ctx.lineTo(xx,yAdj);
+    }
+    ctx.stroke();
+  }
+  var innerField = clamp(100/(1+shieldFactor),1,100);
+  circ(ctx,cx,cy,26,"#0e2a3d","#f2d9a6",2);
+  var needleAng = Math.sin(t*1.2)*0.05*innerField/10;
+  arrow(ctx,cx,cy,cx+20*Math.cos(needleAng),cy+20*Math.sin(needleAng),"#e8534a",2.2);
+  label(ctx,"magnetometer", cx, cy+40, "#9fb0c4",11,"center");
+  label(ctx,"shielding factor ≈ "+shieldFactor.toFixed(1)+"×   residual field ≈ "+innerField.toFixed(1)+"%", cx, cy-baseR-16, "#f2d9a6",12,"center");
+  caption(ctx,"External field lines bend around the nested mu-metal layers, leaving a low residual field at the centre", w,h);
+};
+
+DRAW["wsHV"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"High-voltage electrode gap in gas — testing against Paschen breakdown",w);
+  var cx=w/2, cy=h*0.5;
+  var gapPx = clamp(ctl.electrode_gap*8,20,220);
+  var ex1=cx-gapPx/2, ex2=cx+gapPx/2;
+  ctx.fillStyle="#8a94a0"; ctx.fillRect(ex1-16,cy-60,16,120); ctx.fillRect(ex2,cy-60,16,120);
+  label(ctx,"electrode", ex1-8, cy-70, "#9fb0c4",10,"center");
+  label(ctx,"electrode", ex2+8, cy-70, "#9fb0c4",10,"center");
+  var p = ctl.gas_pressure, d = ctl.electrode_gap, V = ctl.applied_voltage;
+  var pd = p*d/1000;
+  var Vbreak = 60*(pd) + 500/(pd+0.5); // toy Paschen-like curve with a minimum
+  var overVoltage = V*1000 > Vbreak;
+  if(overVoltage){
+    ctx.strokeStyle="#fff"; ctx.lineWidth=2.4;
+    ctx.beginPath(); ctx.moveTo(ex1,cy);
+    var segs=8;
+    for(var i=1;i<segs;i++){
+      var xx=ex1+(ex2-ex1)*i/segs + (Math.random()-0.5)*14;
+      var yy=cy + (Math.random()-0.5)*20;
+      ctx.lineTo(xx,yy);
+    }
+    ctx.lineTo(ex2,cy); ctx.stroke();
+    label(ctx,"⚡ BREAKDOWN!", cx, cy-90, "#e8534a",14,"center");
+  } else {
+    var nLines=4;
+    for(var l=0;l<nLines;l++){
+      var yy2=cy-45+l*30;
+      arrow(ctx,ex1,yy2,ex2-4,yy2,"rgba(255,215,120,.6)",1.4);
+    }
+  }
+  var chartX=w*0.5, chartY=h*0.8, chartW=340, chartH=100;
+  ctx.strokeStyle="#5a6570"; line(ctx,chartX-chartW/2,chartY,chartX+chartW/2,chartY,"#5a6570",1);
+  ctx.strokeStyle="#c9a227"; ctx.lineWidth=2; ctx.beginPath();
+  for(var s=0;s<=60;s++){
+    var pdv = 0.2+s/60*8;
+    var Vb = 60*pdv+500/(pdv+0.5);
+    var xx3=chartX-chartW/2+ (s/60)*chartW;
+    var yy3=chartY - clamp(Vb/12,4,90);
+    if(s===0) ctx.moveTo(xx3,yy3); else ctx.lineTo(xx3,yy3);
+  }
+  ctx.stroke();
+  var curX = chartX-chartW/2+ clamp((pd-0.2)/8,0,1)*chartW;
+  circ(ctx,curX,chartY-clamp(Vbreak/12,4,90),5, overVoltage?"#e8534a":"#2e8b6a","#081a26",1.2);
+  label(ctx,"Paschen curve (V_breakdown vs p·d)", chartX, chartY+20, "#9fb0c4",11,"center");
+  label(ctx,"p·d="+pd.toFixed(2)+"  V_test="+V.toFixed(1)+"kV  V_break≈"+(Vbreak/1000).toFixed(1)+"kV", cx, cy+70, "#f2d9a6",11,"center");
+  caption(ctx, overVoltage? "Operating point is ABOVE the breakdown curve — arc-over occurs!" : "Operating point stays safely below the Paschen minimum curve", w,h);
+};
+
+DRAW["wsVSWR"] = function(ctx,w,h,ctl,cfg,t){
+  bg(ctx,w,h); title(ctx,"RF transmission line feeding an antenna — standing-wave pattern",w);
+  var cy=h*0.5, x1=60,x2=w-60;
+  var Z0=50;
+  var ZL = ctl.load_resistance;
+  var Xs = ctl.match_reactance_series, Xsh = ctl.match_reactance_shunt;
+  // simple reflection coefficient estimate including matching reactances as detuning
+  var mismatch = Math.abs(ZL-Z0)/Z0 + Math.abs(Xs)/300 + Math.abs(Xsh)/300;
+  var gamma = clamp(mismatch/2.2,0,0.95);
+  var VSWR = (1+gamma)/(1-gamma);
+  line(ctx,x1,cy,x2,cy,"#c9c2a8",4);
+  ctx.strokeStyle="#e8534a"; ctx.lineWidth=2.2; ctx.beginPath();
+  for(var i=0;i<=140;i++){
+    var xx=x1+(i/140)*(x2-x1);
+    var kx = (i/140)*4*Math.PI;
+    var env = Math.sqrt(1+gamma*gamma+2*gamma*Math.cos(2*kx));
+    var yy = cy - env*30*Math.sin(t*3);
+    if(i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+  }
+  ctx.stroke();
+  ctx.strokeStyle="rgba(232,83,74,.3)"; ctx.beginPath();
+  for(var i2=0;i2<=140;i2++){
+    var xx2=x1+(i2/140)*(x2-x1);
+    var kx2=(i2/140)*4*Math.PI;
+    var env2 = Math.sqrt(1+gamma*gamma+2*gamma*Math.cos(2*kx2));
+    if(i2===0) ctx.moveTo(xx2,cy-env2*30); else ctx.lineTo(xx2,cy-env2*30);
+  }
+  for(var i3=140;i3>=0;i3--){
+    var xx3=x1+(i3/140)*(x2-x1);
+    var kx3=(i3/140)*4*Math.PI;
+    var env3 = Math.sqrt(1+gamma*gamma+2*gamma*Math.cos(2*kx3));
+    ctx.lineTo(xx3,cy+env3*30);
+  }
+  ctx.closePath(); ctx.fillStyle="rgba(232,83,74,.12)"; ctx.fill();
+  ctx.fillStyle="#c9a227"; ctx.fillRect(x2-6,cy-20,20,40);
+  label(ctx,"antenna\nZ_L="+ZL.toFixed(0)+"Ω", x2+30, cy, "#9fb0c4",10,"left");
+  label(ctx,"transmitter", x1-10, cy-30, "#9fb0c4",10,"left");
+  var mx=w*0.5, my=h*0.82, mr=55;
+  ctx.strokeStyle="#5a6570"; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.arc(mx,my,mr,Math.PI,Math.PI*2); ctx.stroke();
+  var ang2 = Math.PI + clamp((VSWR-1)/6,0,1)*Math.PI;
+  arrow(ctx,mx,my,mx+mr*0.85*Math.cos(ang2),my+mr*0.85*Math.sin(ang2), VSWR<2?"#2e8b6a":"#e8534a",3);
+  label(ctx,"VSWR ≈ "+VSWR.toFixed(2)+":1", mx, my+22, "#f2d9a6",13,"center");
+  caption(ctx, VSWR<1.5? "Well matched — minimal standing wave, most power reaches the antenna" : "Mismatch present — standing wave grows, power reflects back toward the transmitter", w,h);
+};
+
+/* ---------------- fallback ---------------- */
+function fallback(ctx,w,h,ctl,cfg){
+  bg(ctx,w,h); title(ctx,cfg.title||"Physical model",w);
+  caption(ctx,"Model rendering not yet available for this panel.",w,h);
+}
+
+return {
+  draw: function(id,ctx,w,h,ctl,cfg,t,isDark){
+    var fn = DRAW[id];
+    if(fn) fn(ctx,w,h,ctl,cfg,t,isDark);
+    else fallback(ctx,w,h,ctl,cfg);
+  }
+};
+
+})();
+</script>
+
+<script>
+/* ===== Advanced Electricity & Magnetism Learning Lab — engine ===== */
+(function(){
+"use strict";
+
+var CATEGORY_ORDER = ["Electrostatics","Magnetostatics","Electrodynamics","EM Waves & Propagation",
+  "Electric & Magnetic Materials","Industrial Workshops"];
+var CATEGORY_ICON = {"Electrostatics":"⚡","Magnetostatics":"🧲","Electrodynamics":"🔄",
+  "EM Waves & Propagation":"📡","Electric & Magnetic Materials":"🧪","Industrial Workshops":"🏭"};
+
+var PROGRESS_KEY = "emlab-progress-v1";
+function loadProgress(){ try{ return JSON.parse(localStorage.getItem(PROGRESS_KEY)||"[]"); }catch(e){ return []; } }
+function saveProgress(arr){ localStorage.setItem(PROGRESS_KEY, JSON.stringify(arr)); }
+var visited = loadProgress();
+
+function markVisited(id){
+  if(visited.indexOf(id)===-1){ visited.push(id); saveProgress(visited); }
+  updateProgressUI();
+}
+function updateProgressUI(){
+  var total = EM_PANELS.length;
+  var pct = Math.round(100*visited.length/total);
+  document.getElementById("progressFill").style.width = pct+"%";
+  document.getElementById("progressCount").textContent = visited.length+" / "+total+" explored";
+}
+document.getElementById("progressResetBtn").addEventListener("click", function(){
+  visited = []; saveProgress(visited); updateProgressUI(); renderSidebar();
+});
+
+function buildSidebar(){
+  var wrap = document.getElementById("navList");
+  wrap.innerHTML = "";
+  CATEGORY_ORDER.forEach(function(cat){
+    var items = EM_PANELS.filter(function(p){ return p.category===cat; });
+    if(!items.length) return;
+    var label = document.createElement("div");
+    label.className = "group-label";
+    label.textContent = CATEGORY_ICON[cat]+" "+cat;
+    wrap.appendChild(label);
+    items.forEach(function(p){
+      var link = document.createElement("div");
+      link.className = "navlink";
+      link.setAttribute("data-id", p.id);
+      var check = document.createElement("span");
+      check.className = "navlink-check"+(visited.indexOf(p.id)>-1 ? " done":"");
+      check.textContent = "✓";
+      link.appendChild(check);
+      var txt = document.createElement("span");
+      txt.textContent = p.title;
+      link.appendChild(txt);
+      link.addEventListener("click", function(){ showPanel(p.id); });
+      wrap.appendChild(link);
+    });
+  });
+}
+function renderSidebar(){ buildSidebar(); highlightActive(); }
+function highlightActive(){
+  document.querySelectorAll(".navlink").forEach(function(el){
+    el.classList.toggle("active", el.getAttribute("data-id")===currentId);
+    var chk = el.querySelector(".navlink-check");
+    if(chk) chk.classList.toggle("done", visited.indexOf(el.getAttribute("data-id"))>-1);
+  });
+}
+
+var currentId = null;
+
+function fmtNum(x){
+  if(x===0 || !isFinite(x)) return String(x);
+  var ax = Math.abs(x);
+  if(ax>=100000 || ax<0.001) return x.toExponential(3);
+  return parseFloat(x.toPrecision(5)).toString();
+}
+
+function ctrlRowHTML(c){
+  if(c.isSelect){
+    var opts = c.options.map(function(o){ return '<option value="'+o+'"'+(o===c.default?' selected':'')+'>'+o+'</option>'; }).join("");
+    return '<div class="ctrl"><label>'+c.name+' ('+c.label+')</label>'+
+      '<select data-key="'+c.key+'" class="live-ctrl">'+opts+'</select></div>';
+  }
+  return '<div class="ctrl"><label>'+c.name+' ('+c.label+') &mdash; <span class="readout" data-readout-for="'+c.key+'">'+c.default+'</span> '+c.unit+'</label>'+
+    '<input type="range" class="live-ctrl" data-key="'+c.key+'" min="'+c.min+'" max="'+c.max+'" step="'+(c.step||1)+'" value="'+c.default+'"></div>';
+}
+
+function readControls(container, cfg){
+  var vals = {};
+  cfg.controls.forEach(function(c){
+    var el = container.querySelector('[data-key="'+c.key+'"]');
+    if(c.isSelect){ vals[c.key] = el.value; }
+    else { vals[c.key] = parseFloat(el.value); }
+  });
+  return vals;
+}
+
+function drawSweepPlot(canvas, cfg, ctl){
+  var ctx = canvas.getContext("2d");
+  var w = canvas.width, h = canvas.height;
+  ctx.clearRect(0,0,w,h);
+  var isDark = document.documentElement.getAttribute("data-theme")==="dark";
+  ctx.fillStyle = isDark ? "#0e2338" : "#FFFDF3";
+  ctx.fillRect(0,0,w,h);
+  var pad = {l:70,r:20,t:20,b:44};
+  var sweepC = cfg.controls.find(function(c){ return c.key===cfg.sweepKey; });
+  if(!sweepC){ return; }
+  var N = 60;
+  var xs=[], ys=[];
+  for(var i=0;i<=N;i++){
+    var x = sweepC.min + (sweepC.max-sweepC.min)*i/N;
+    var trial = Object.assign({}, ctl);
+    trial[cfg.sweepKey] = x;
+    var out;
+    try{ out = cfg.compute(trial); }catch(e){ out = {Y:NaN}; }
+    xs.push(x); ys.push(out.Y);
+  }
+  var yMin = Math.min.apply(null, ys.filter(isFinite));
+  var yMax = Math.max.apply(null, ys.filter(isFinite));
+  if(yMin===yMax){ yMin -= 1; yMax += 1; }
+  var yPad = (yMax-yMin)*0.08;
+  yMin -= yPad; yMax += yPad;
+  function px(x){ return pad.l + (w-pad.l-pad.r)*(x-sweepC.min)/(sweepC.max-sweepC.min); }
+  function py(y){ return h-pad.b - (h-pad.t-pad.b)*(y-yMin)/(yMax-yMin); }
+  function fmtTick(v){
+    var av = Math.abs(v);
+    if(av===0) return '0';
+    if(av < 0.001) return v.toExponential(1);
+    if(av < 1) return v.toFixed(3);
+    if(av < 10) return v.toFixed(2);
+    if(av < 100) return v.toFixed(1);
+    return v.toFixed(0);
+  }
+  // grid
+  ctx.strokeStyle = isDark ? "#24405f" : "#E3D6A0";
+  ctx.lineWidth = 0.7;
+  for(var gx=0; gx<=10; gx++){
+    var xx = pad.l + (w-pad.l-pad.r)*gx/10;
+    ctx.beginPath(); ctx.moveTo(xx,pad.t); ctx.lineTo(xx,h-pad.b); ctx.stroke();
+  }
+  for(var gy=0; gy<=8; gy++){
+    var yy = pad.t + (h-pad.t-pad.b)*gy/8;
+    ctx.beginPath(); ctx.moveTo(pad.l,yy); ctx.lineTo(w-pad.r,yy); ctx.stroke();
+  }
+  // axes
+  ctx.strokeStyle = "#1F3A93"; ctx.lineWidth = 1.4;
+  ctx.strokeRect(pad.l,pad.t,w-pad.l-pad.r,h-pad.t-pad.b);
+  // axis tick values, so students can read the scale directly off the graph
+  ctx.fillStyle = isDark ? "#dde6ec" : "#0B173A";
+  ctx.font = "10px Source Sans 3, sans-serif";
+  ctx.textAlign = 'center';
+  for(var tgx=0; tgx<=10; tgx+=2){
+    var tvx = sweepC.min + (sweepC.max-sweepC.min)*tgx/10;
+    var txx = pad.l + (w-pad.l-pad.r)*tgx/10;
+    ctx.fillText(fmtTick(tvx), txx, h-pad.b+13);
+    ctx.strokeStyle = "#1F3A93"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(txx, h-pad.b); ctx.lineTo(txx, h-pad.b+4); ctx.stroke();
+  }
+  ctx.textAlign = 'right';
+  for(var tgy=0; tgy<=8; tgy+=2){
+    var tvy = yMax - (yMax-yMin)*tgy/8;
+    var tyy = pad.t + (h-pad.t-pad.b)*tgy/8;
+    ctx.fillText(fmtTick(tvy), pad.l-8, tyy+3);
+    ctx.strokeStyle = "#1F3A93"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(pad.l-4, tyy); ctx.lineTo(pad.l, tyy); ctx.stroke();
+  }
+  ctx.textAlign = 'center';
+  // curve
+  ctx.strokeStyle = "#a8452f"; ctx.lineWidth = 2.4;
+  ctx.beginPath();
+  for(var i2=0;i2<xs.length;i2++){
+    var xp = px(xs[i2]), yp = py(ys[i2]);
+    if(!isFinite(yp)) continue;
+    if(i2===0) ctx.moveTo(xp,yp); else ctx.lineTo(xp,yp);
+  }
+  ctx.stroke();
+  // current point marker
+  var curX = ctl[cfg.sweepKey];
+  var curOut; try{ curOut = cfg.compute(ctl); }catch(e){ curOut={Y:NaN}; }
+  if(isFinite(curOut.Y)){
+    ctx.fillStyle = "#c9a227";
+    ctx.beginPath(); ctx.arc(px(curX), py(curOut.Y), 5, 0, 2*Math.PI); ctx.fill();
+    ctx.strokeStyle = "#081a26"; ctx.lineWidth=1.2; ctx.stroke();
+  }
+  // labels
+  ctx.fillStyle = isDark ? "#dde6ec" : "#0B173A";
+  ctx.font = "12px Source Sans 3, sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(sweepC.name+" ("+sweepC.unit+")", w/2, h-8);
+  ctx.save(); ctx.translate(16,h/2); ctx.rotate(-Math.PI/2);
+  ctx.fillText(cfg.resultSymbol, 0, 0);
+  ctx.restore();
+}
+
+function buildExperimentPanel(cfg){
+  var html = '<div class="panel active">'+
+    '<div class="panel-head"><div class="kicker">'+cfg.category+'</div><h2>'+cfg.title+'</h2><p>'+cfg.aim+'</p>'+
+      '<a class="doclink" href="../docs-em/experiments/'+cfg.id+'/" target="_blank" rel="noopener">📖 Full theory, formulas &amp; procedure for this in the User Guide &rarr;</a>'+
+      '<a class="doclink" href="../docs-em/assets/lab-record-booklet-em.pdf" target="_blank" rel="noopener">📝 Open Lab Record &amp; Viva-Voce Booklet (PDF) &rarr;</a>'+
+    '</div>'+
+    '<div class="formula">'+cfg.formula+'</div>'+
+    '<div class="card">'+
+      '<div class="section-tag">🔬 Animated physical model &mdash; watch it respond as you move the sliders</div>'+
+      '<div class="model-stage"><canvas class="model-canvas" width="760" height="380" style="width:100%;height:auto;"></canvas></div>'+
+      '<div class="model-caption"><span>Live apparatus &mdash; drag any control below.</span><b>'+cfg.resultSymbol+' = <span class="live-result">&hellip;</span></b></div>'+
+      '<div class="controls-grid" style="margin-top:16px;">'+cfg.controls.map(ctrlRowHTML).join("")+'</div>'+
+    '</div>'+
+    '<div class="card">'+
+      '<div class="graph-toggle"><button class="graph-toggle-btn btn ghost" type="button">📈 Show characteristic curve ('+cfg.resultSymbol+' vs '+cfg.sweepKey+')</button></div>'+
+      '<div class="mini-graph-wrap"><div class="stage" style="background:#FFFDF3;"><canvas class="sweep-canvas" width="760" height="260" style="width:100%;height:auto;"></canvas></div>'+
+      '<div class="note">Live sweep of '+cfg.resultSymbol+' versus the highlighted control, holding the others at their current slider values. The gold dot marks your current setting.</div></div>'+
+    '</div>'+
+  '</div>';
+  return html;
+}
+
+function scoreControl(c, val){
+  var sigma = c.tolerance || (c.max-c.min)*0.2;
+  var z = (val - c.optimal)/sigma;
+  return 100*Math.exp(-0.5*z*z);
+}
+
+var WORKSHOP_DOC_SLUG = {
+  wsEMC: "emi-emc-testing",
+  wsTransformer: "transformer-design-testing",
+  wsAntenna: "antenna-radiation-pattern",
+  wsEddyNDT: "eddy-current-ndt",
+  wsShielding: "magnetic-shielding-design",
+  wsHV: "hv-insulation-breakdown",
+  wsVSWR: "rf-impedance-matching-vswr",
+  wsPFC: "power-factor-correction",
+  wsSurge: "surge-arrester-lightning-protection",
+  wsHallSensor: "hall-effect-current-sensor-calibration",
+  wsWaveguideFeed: "waveguide-feed-design",
+  wsQuench: "quench-protection-design"
+};
+
+function buildWorkshopPanel(cfg){
+  var docSlug = WORKSHOP_DOC_SLUG[cfg.id] || cfg.id;
+  var html = '<div class="panel active">'+
+    '<div class="panel-head"><div class="kicker">Industrial Workshop</div><h2>'+cfg.title+'</h2>'+
+      '<a class="doclink" href="../docs-em/workshops/'+docSlug+'/" target="_blank" rel="noopener">📖 Full theory, formulas &amp; procedure for this in the User Guide &rarr;</a>'+
+      '<a class="doclink" href="../docs-em/assets/lab-record-booklet-em.pdf" target="_blank" rel="noopener">📝 Open Lab Record &amp; Viva-Voce Booklet (PDF) &rarr;</a>'+
+    '</div>'+
+    '<div class="task-box"><div class="role">Scenario</div><p>'+cfg.scenario+'</p></div>'+
+    '<div class="card">'+
+      '<div class="section-tag">🏭 Animated plant / bench model &mdash; watch it respond as you tune the controls</div>'+
+      '<div class="model-stage"><canvas class="model-canvas" width="760" height="360" style="width:100%;height:auto;"></canvas></div>'+
+    '</div>'+
+    '<div class="card"><div class="controls-grid">'+cfg.controls.map(function(c){
+      return '<div class="ctrl"><label>'+c.label+' &mdash; <span class="readout" data-readout-for="'+c.key+'">'+c.default+'</span> '+c.unit+'</label>'+
+        '<input type="range" class="live-ctrl" data-key="'+c.key+'" min="'+c.min+'" max="'+c.max+'" step="'+((c.max-c.min)/100)+'" value="'+c.default+'"></div>';
+    }).join("")+'</div></div>'+
+    '<div class="card">'+
+      '<div class="score-meter">'+
+        '<div class="gauge-wrap"><canvas class="gauge-canvas" width="120" height="120"></canvas>'+
+          '<div class="gauge-num"><span class="pct" data-score>0%</span><span class="lbl">score</span></div></div>'+
+        '<div class="score-msg"><div class="verdict" data-verdict>Adjust the controls above.</div>'+
+          '<div class="hint">Score reflects how close each control is to its ideal operating value for this scenario. Reach 100% to unlock a certificate.</div></div>'+
+      '</div>'+
+      '<div class="cert-unlock" id="certUnlock-'+cfg.id+'"><label>Your name for the certificate: </label>'+
+        '<input type="text" id="certNameInput-'+cfg.id+'" placeholder="Full name"> '+
+        '<button class="btn gen-cert-btn" data-wsid="'+cfg.id+'">Generate Certificate</button></div>'+
+    '</div>'+
+  '</div>';
+  return html;
+}
+
+function drawGauge(canvas, pct){
+  var ctx = canvas.getContext("2d");
+  var w=canvas.width,h=canvas.height;
+  ctx.clearRect(0,0,w,h);
+  var cx=w/2, cy=h/2, r=50;
+  ctx.lineWidth=10; ctx.strokeStyle="#e5ded0";
+  ctx.beginPath(); ctx.arc(cx,cy,r,Math.PI*0.75,Math.PI*2.25); ctx.stroke();
+  var frac = Math.max(0,Math.min(1,pct/100));
+  ctx.strokeStyle = pct>=90 ? "#2e7d6b" : (pct>=60 ? "#c9a227" : "#a8452f");
+  ctx.beginPath(); ctx.arc(cx,cy,r,Math.PI*0.75,Math.PI*0.75+frac*Math.PI*1.5); ctx.stroke();
+}
+
+var rafId = null;
+function startModelLoop(container, cfg){
+  var t0 = performance.now();
+  function frame(){
+    if(currentId !== cfg.id || !document.body.contains(container)) return;
+    var canvas = container.querySelector(".model-canvas");
+    if(canvas){
+      var ctl = readControls(container, cfg);
+      var ctx = canvas.getContext("2d");
+      var isDark = document.documentElement.getAttribute("data-theme")==="dark";
+      var t = (performance.now()-t0)/1000;
+      try{ MODEL_ENGINE.draw(cfg.id, ctx, canvas.width, canvas.height, ctl, cfg, t, isDark); }catch(e){ /* keep the app alive even if a model throws */ }
+    }
+    rafId = requestAnimationFrame(frame);
+  }
+  if(rafId) cancelAnimationFrame(rafId);
+  rafId = requestAnimationFrame(frame);
+}
+
+function attachExperimentBehavior(container, cfg){
+  var graphWrap = container.querySelector(".mini-graph-wrap");
+  var graphBtn = container.querySelector(".graph-toggle-btn");
+  function recompute(){
+    var ctl = readControls(container, cfg);
+    var out; try{ out = cfg.compute(ctl); }catch(e){ out = {Y:NaN,Yunit:""}; }
+    container.querySelector(".live-result").textContent = fmtNum(out.Y)+" "+(out.Yunit||"");
+    cfg.controls.forEach(function(c){
+      if(c.isSelect) return;
+      var r = container.querySelector('[data-readout-for="'+c.key+'"]');
+      if(r) r.textContent = ctl[c.key];
+    });
+    if(graphWrap.classList.contains("show")) drawSweepPlot(container.querySelector(".sweep-canvas"), cfg, ctl);
+  }
+  container.querySelectorAll(".live-ctrl").forEach(function(el){
+    el.addEventListener("input", recompute);
+  });
+  graphBtn.addEventListener("click", function(){
+    var showing = graphWrap.classList.toggle("show");
+    graphBtn.classList.toggle("on", showing);
+    graphBtn.textContent = (showing ? "📉 Hide" : "📈 Show")+" characteristic curve ("+cfg.resultSymbol+" vs "+cfg.sweepKey+")";
+    if(showing) drawSweepPlot(container.querySelector(".sweep-canvas"), cfg, readControls(container, cfg));
+  });
+  recompute();
+  startModelLoop(container, cfg);
+}
+
+function attachWorkshopBehavior(container, cfg){
+  function recompute(){
+    var total=0;
+    cfg.controls.forEach(function(c){
+      var el = container.querySelector('[data-key="'+c.key+'"]');
+      var val = parseFloat(el.value);
+      var r = container.querySelector('[data-readout-for="'+c.key+'"]');
+      if(r) r.textContent = fmtNum(val);
+      total += scoreControl(c, val);
+    });
+    var pct = Math.round(total/cfg.controls.length);
+    container.querySelector("[data-score]").textContent = pct+"%";
+    drawGauge(container.querySelector(".gauge-canvas"), pct);
+    var verdict = container.querySelector("[data-verdict]");
+    if(pct>=90) verdict.textContent = "Excellent — production-ready configuration!";
+    else if(pct>=70) verdict.textContent = "Good, but still room to optimize further.";
+    else if(pct>=40) verdict.textContent = "Getting there — keep tuning the controls.";
+    else verdict.textContent = "Far from optimal — review the scenario and try again.";
+    var unlock = document.getElementById("certUnlock-"+cfg.id);
+    if(unlock) unlock.classList.toggle("show", pct>=100);
+    container.setAttribute("data-last-score", pct);
+  }
+  container.querySelectorAll(".live-ctrl").forEach(function(el){
+    el.addEventListener("input", recompute);
+  });
+  var certBtn = container.querySelector(".gen-cert-btn");
+  if(certBtn){
+    certBtn.addEventListener("click", function(){
+      window.EMLAB.generateCert(certBtn.getAttribute("data-wsid"));
+    });
+  }
+  recompute();
+  startModelLoop(container, cfg);
+}
+
+function showPanel(id){
+  var cfg = EM_PANELS.find(function(p){ return p.id===id; });
+  if(!cfg) return;
+  if(rafId){ cancelAnimationFrame(rafId); rafId=null; }
+  currentId = id;
+  markVisited(id);
+  var mount = document.getElementById("mainMount");
+  mount.innerHTML = cfg.kind==="experiment" ? buildExperimentPanel(cfg) : buildWorkshopPanel(cfg);
+  if(cfg.kind==="experiment") attachExperimentBehavior(mount, cfg);
+  else attachWorkshopBehavior(mount, cfg);
+  highlightActive();
+  window.scrollTo(0,0);
+}
+
+window.EMLAB = {
+  generateCert: function(wsId){
+    var cfg = EM_PANELS.find(function(p){ return p.id===wsId; });
+    var container = document.getElementById("mainMount");
+    var score = container.getAttribute("data-last-score") || "0";
+    var name = document.getElementById("certNameInput-"+wsId).value.trim() || "Student";
+    document.getElementById("certName").textContent = name;
+    document.getElementById("certWorkshop").textContent = cfg.title;
+    document.getElementById("certScore").textContent = score+"%";
+    document.getElementById("certDate").textContent = new Date().toLocaleDateString();
+    document.getElementById("certOverlay").classList.add("show");
+  }
+};
+window.closeCert = function(){ document.getElementById("certOverlay").classList.remove("show"); };
+
+buildSidebar();
+updateProgressUI();
+showPanel(EM_PANELS[0].id);
+
+})();
+
+</script>
+</body>
+</html>
