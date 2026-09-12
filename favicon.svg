@@ -1,0 +1,22 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgEM" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1E3A8A"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="512" height="512" rx="104" fill="url(#bgEM)"/>
+
+  <!-- horseshoe magnet -->
+  <path d="M170 130 L170 290 A86 86 0 0 0 342 290 L342 130"
+        fill="none" stroke="#F1F5F9" stroke-width="46" stroke-linecap="round"/>
+  <!-- pole tips -->
+  <rect x="140" y="98" width="60" height="60" rx="12" fill="#EF4444"/>
+  <rect x="312" y="98" width="60" height="60" rx="12" fill="#F1F5F9"/>
+  <text x="170" y="145" font-family="Arial, sans-serif" font-size="40" font-weight="bold" fill="#FFFFFF" text-anchor="middle">N</text>
+  <text x="342" y="145" font-family="Arial, sans-serif" font-size="40" font-weight="bold" fill="#1D4ED8" text-anchor="middle">S</text>
+
+  <!-- lightning bolt over the top -->
+  <polygon points="268,220 210,340 250,340 224,414 320,300 270,300"
+           fill="#FDE047" stroke="#CA8A04" stroke-width="6" stroke-linejoin="round"/>
+</svg>
